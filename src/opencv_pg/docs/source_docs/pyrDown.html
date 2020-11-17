@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}
+pyrDown
+{% endblock %}
+
+{% block description %}
+<p>Blurs an image and downsamples it.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.pyrDown(src[, dst[, dstsize[, borderType]]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image; it has the specified size and the same type as <code>src</code>.</li>
+    <li><prmtr>dstsize</prmtr> (optional; <ptype>int</ptype>): Size of the output image.</li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. Choose from:
+        <ul>
+            <li>BORDER_REPLICATE</li>
+            <li>BORDER_REFLECT</li>
+            <li>BORDER_WRAP</li>
+            <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+            <li>BORDER_ISOLATED</li>
+        </ul></li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function performs the downsampling step of the Gaussian pyramid construction. An image pyramid is a collection of images - all arising from a single original image - that are successively downsampled until some desired stopping point is reached.
+    
+    First, it convolves the source image with the kernel:
+    $$\frac{1}{256} \left[ \begin{array}{ccccc} 
+    1 & 4 & 6 & 4 & 1 \\
+    4 & 16 & 24 & 16 & 4 \\
+    6 & 24 & 36 & 24 & 6 \\
+    4 & 16 & 24 & 16 & 4 \\
+    1 & 4 & 6 & 4 & 1
+    \end{array} \right]$$
+    Then, it downsamples the image by rejecting even rows and columns.
+</p>
+{% endblock %}
+
+{% block notes %}
+<p>
+    <ul>
+        <li>By default, size of the output image is computed as <code>Size((src.cols+1)/2, (src.rows+1)/2)</code>, but in any case, the following conditions should be satisfied:
+        <ul>
+            <li>\(|\texttt{dstsize.width}\cdot 2 - \texttt{src.cols}| \leq 2\)</li>
+            <li>\(|\texttt{dstsize.height}\cdot 2 - \texttt{src.rows}| \leq 2\)</li>
+        </ul></li>
+        <li>BORDER_CONSTANT and BORDER_TRANSPARENT are not supported.</li>
+        <li>When we reduce the size of an image, we are actually losing information of the image.</li>
+    </ul>
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gaf9bba239dfca11654cb7f50f889fc2ff">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/d4/d1f/tutorial_pyramids.html">OpenCV Tutorial: Image Pyramids</a></li>
+</ul>
+{% endblock %}

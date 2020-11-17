@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+cornerHarris
+{% endblock %}
+
+{% block description %}
+<p>Harris edge detector.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.cornerHarris(src, blockSize, ksize, k[, dst[, borderType]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input single-channel 8-bit or floating-point image.</li>
+    <li><prmtr>blockSize</prmtr> (<ptype>int</ptype>): Neighborhood size. For every pixel \(p\), the function considers a <code>blockSize x blockSize</code> neighborhood.</li>
+    <li><prmtr>ksize</prmtr> (<ptype>int</ptype>): Aperture parameter for the <code>Sobel</code> operator. Must be 1, 3, 5, or 7.</li>
+    <li><prmtr>k</prmtr> (<ptype>float</ptype>): Harris detector free parameter. See the formula in explanation.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Image to store the Harris detector responses. It has the type <code>CV_32FC1</code> and the same size as <code>src</code>.</li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. Choose from:
+        <ul>
+            <li>BORDER_CONSTANT</li>
+            <li>BORDER_REPLICATE</li>
+            <li>BORDER_REFLECT</li>
+            <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+            <li>BORDER_ISOLATED</li>
+        </ul></li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function runs the Harris corner detector on the image. Similarly to <code>cornerMinEigenVal</code> and <code>cornerEigenValsAndVecs</code>, for each pixel \((x,y)\) it calculates a \(2 \times 2\) gradient covariance matrix \(M(x,y)\) over a <code>blockSize x blockSize</code> neighborhood. Then, it computes the following characteristic: $$\text{dst}(x,y) = \det(M^{(x,y)})-k \cdot \left(\text{tr}(M^{(x,y)})\right)^2$$  Corners in the image can be found as the local maxima of this response map.
+</p>
+{% endblock %}
+
+{% block notes %}
+<p>
+    <ul>
+        <li>BORDER_WRAP and BORDER_TRANSPARENT are not supported.</li>
+        <li>If you want to use BORDER_CONSTANT, you should manually add border to your image with <code>copyMakeBorder</code>, otherwise the default value is set to 0.</li>
+        <li>For the <code>ksize</code> parameter, other odd, positive values may not cause errors in program execution. However, anything larger than 7 is padded with 0's and is not producing a different result. See <a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gacea54f142e81b6758cb6f375ce782c8d">Sobel documentation</a>.</li>
+    </ul>
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#gac1fc3598018010880e370e2f709b4345">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/d4/d7d/tutorial_harris_detector.html">OpenCV Tutorial: Harris Corner Detector</a></li>
+</ul>
+{% endblock %}

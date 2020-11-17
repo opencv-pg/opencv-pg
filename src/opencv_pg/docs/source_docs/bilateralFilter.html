@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+bilateralFilter
+{% endblock %}
+
+{% block description %}
+<p>Applies the bilateral filter to an image.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.bilateralFilter(src, d, sigmaColor, sigmaSpace[, dst[, borderType]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image; source 8-bit or floating-point, 1-channel or 3-channel image.</li>
+    <li><prmtr>d</prmtr> (<ptype>int</ptype>): Diameter of each pixel neighborhood that is used during filtering. If it is non-positive, it is computed from <code>sigmaSpace</code>.</li>
+    <li><prmtr>sigmaColor</prmtr> (<ptype>float</ptype>): Filter sigma in the color space. A larger value of the parameter means that farther colors within the pixel neighborhood (see <code>sigmaSpace</code>) will be mixed together, resulting in larger areas of semi-equal color.</li>
+    <li><prmtr>sigmaSpace</prmtr> (<ptype>float</ptype>): Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see <code>sigmaColor</code>). When <code>d</code> &gt; 0, it specifies the neighborhood size regardless of sigmaSpace . Otherwise, <code>d</code> is proportional to <code>sigmaSpace</code>.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same size and type as <code>src</code>.</li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. Choose from:
+        <ul>
+            <li>BORDER_CONSTANT</li>
+            <li>BORDER_REPLICATE</li>
+            <li>BORDER_REFLECT</li>
+            <li>BORDER_WRAP</li>
+            <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+            <li>BORDER_ISOLATED</li>
+        </ul>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function applies bilateral filtering to the input image, as described in <a href="http://www.dai.ed.ac.uk/CVonline/LOCAL_COPIES/MANDUCHI1/Bilateral_Filtering.html">this paper</a>. The <code>bilateralFilter</code> function can reduce unwanted noise very well while keeping edges fairly sharp. However, it is very slow compared to most filters.
+</p>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>Sigma values: For simplicity, you can set the 2 sigma values to be the same. If they are small (&lt; 10), the filter will not have much effect, whereas if they are large (&gt; 150), they will have a very strong effect, making the image look “cartoonish”.</li>
+    <li>Filter size: Large filters (d &gt; 5) are very slow, so it is recommended to use d=5 for real-time applications, and perhaps d=9 for offline applications that need heavy noise filtering.</li>
+    <li>This filter does not work inplace.</li>
+    <li>If you want to use BORDER_CONSTANT, you should manually add border to your image with <code>copyMakeBorder</code>, otherwise the default value is set to 0.</li>
+</ul>
+
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#ga9d7064d478c95d60003cf839430737ed">OpenCV Documentation</a></li>
+</ul>
+{% endblock %}

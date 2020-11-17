@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+GaussianBlur
+{% endblock %}
+
+{% block description %}
+<p>Blurs an image using a Gaussian filter.  The function convolves the source image with the specified Gaussian kernel.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType]]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image. The image can have any number of channels, which are processed independently, but the depth should be <code>cv2.CV_8U</code>, <code>cv2.CV_16U</code>, <code>cv2.CV_16S</code>, <code>cv2.CV_32F</code> or <code>cv2.CV_64F</code>.</li>
+    <li><prmtr>ksize</prmtr> (<ptype>tuple: (int, int)</ptype>): Gaussian kernel size. Tuple represents (width, height). Width and height can differ, but must be positive and odd. Or, they can be zero’s and then they are computed from <code>sigmaX</code> and <code>sigmaY</code>.</li>
+    <li><prmtr>sigmaX</prmtr> (<ptype>float</ptype>): Gaussian kernel standard deviation in X direction.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same size and type as <code>src</code>.</li>
+    <li><prmtr>sigmaY</prmtr> (optional; <ptype>float</ptype>): Gaussian kernel standard deviation in Y direction.  If set to 0, then will be equal to <code>sigmaX</code>. Default is set to 0.</li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. Choose from:
+        <ul>
+            <li>BORDER_CONSTANT</li>
+            <li>BORDER_REPLICATE</li>
+            <li>BORDER_REFLECT</li>
+            <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+            <li>BORDER_ISOLATED</li>
+        </ul></li>
+</ul>
+
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>If <code>ksize = (0,0)</code>, then <code>ksize</code> is computed from <code>sigmaX</code> and <code>sigmaY</code>.</li>
+    <li>If <code>sigmaX</code> and <code>sigmaY</code> are both 0, then <code>sigmaX</code> and <code>sigmaY</code> are computed from <code>ksize</code>.</li>
+    <li>To fully control the result regardless of possible future modifications of all this semantics, it is recommended to specify all of <code>ksize</code>, <code>sigmaX</code>, and <code>sigmaY</code>.</li>
+    <li>BORDER_WRAP is not supported.</li>
+    <li>If you want to use BORDER_CONSTANT, you should manually add border to your image with <code>copyMakeBorder</code>, otherwise the default value is set to 0.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    This filter works by producing a window of size <code>ksize</code> that is examined surrounding each pixel in the image. A two-dimensional convolution matrix over this window is created using a Gaussian distribution from the center point (the pixel under consideration). This distribution gives the center pixel the heaviest weight, with smaller weights given as we move further outwards. Essentially, this is acting as a weighted average for the center pixel to be influenced by its neighbors, with closer neighbors having a larger influence. As <code>sigmaX</code> and <code>sigmaY</code> get smaller, the Gaussian distribution's peak becomes narrower, meaning that the image will be less blurred as further pixels receive smaller weights in the weighted average. Similarly, reducing the window size (<code>ksize</code>) produces an image with less blur since we are considering only neighbors that are closer to the center pixel.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gaabe8c836e97159a9193fb0b11ac52cf1">OpenCV Documentation</a></li>
+</ul>
+
+{% endblock %}

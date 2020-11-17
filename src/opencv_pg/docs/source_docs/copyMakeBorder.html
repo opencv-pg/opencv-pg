@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+copyMakeBorder
+{% endblock %}
+
+{% block description %}
+<p>Forms a border around an image.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.copyMakeBorder(src, top, bottom, left, right, borderType[, dst[, value]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): input image</li>
+    <li><prmtr>top</prmtr> (<ptype>int</ptype>): Parameter specifying how many pixels at top of source image rectangle to extrapolate</li>
+    <li><prmtr>bottom</prmtr> (<ptype>int</ptype>): Parameter specifying how many pixels on bottom of source image rectangle to extrapolate</li>
+    <li><prmtr>left</prmtr> (<ptype>int</ptype>): Parameter specifying how many pixels on left side of source image rectangle to extrapolate</li>
+    <li><prmtr>right</prmtr> (<ptype>int</ptype>): Parameter specifying how many pixels on right side of source image rectangle to extrapolate</li>
+    <li><prmtr>borderType</prmtr> (<a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Choose from:
+        <ul>
+            <li>BORDER_CONSTANT</li>
+            <li>BORDER_REPLICATE</li>
+            <li>BORDER_REFLECT</li>
+            <li>BORDER_WRAP</li>
+            <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+            <li>BORDER_ISOLATED</li>
+        </ul>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same type as <code>src</code> and size <code>Size(src.cols+left+right, src.rows+top+bottom)</code>.</li>
+    <li><prmtr>value</prmtr> (optional; <ptype>int</ptype>): Border value if borderType=BORDER_CONSTANT</li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>The function copies the source image into the middle of the destination image. The areas to the left, to the right, above and below the copied source image will be filled with extrapolated pixels. This is not what filtering functions based on it do (they extrapolate pixels on-fly), but what other more complex functions, including your own, may do to simplify image boundary handling.</li>
+    <li>The function supports the mode when <code>src</code> is already in the middle of <code>dst</code>. In this case, the function does not copy <code>src</code> itself but simply constructs the border.</li>
+    <li>When the source image is a part (ROI) of a bigger image, the function will try to use the pixels outside of the ROI to form a border. To disable this feature and always do extrapolation, as if <code>src</code> was not a ROI, use borderType BORDER_ISOLATED.</li>
+    <li>BORDER_TRANSPARENT is not supported.</li>
+</ul>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga2ac1049c2c3dd25c2b41bffe17658a36">OpenCV Documentation</a></li>
+</ul>
+
+
+{% endblock %}

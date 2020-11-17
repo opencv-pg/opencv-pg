@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+inRange
+{% endblock %}
+
+{% block description %}
+<p>Checks if array elements lie between the elements of two other arrays.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.inRange(src, lowerb, upperb[, dst]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): First input array.</li>
+    <li><prmtr>lowerb</prmtr> (<ptype>np.ndarray or tuple</ptype>): Inclusive lower boundary scalar or array (tuple representing lower bound for each channel).</li>
+    <li><prmtr>upperb</prmtr> (<ptype>np.ndarray or tuple</ptype>): Inclusive upper boundary scalar or array (tuple representing upper bound for each channel).</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output array of the same size as <code>src</code> and <code>cv2.CV_8U</code> type.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function checks the range as follows:
+    <ul>
+        <li>For every element of a single-channel input array: $$\text{dst}(I)=\text{lowerb}(I)_0 \leq \text{src}(I)_0 \leq \text{upperb}(I)_0$$</li>
+        <li>For two-channel arrays:
+            $$\text{dst}(I)= \left( \text{lowerb}(I)_0 \leq \text{src}(I)_0 \leq \text{upperb}(I)_0 \right) \wedge \left( \text{lowerb}(I)_1 \leq \text{src}(I)_1 \leq \text{upperb}(I)_1 \right)$$
+        </li>
+    </ul>
+    ...and so on. That is, \(\text{dst}(I)\) is set to 255 (all 1-bits) if \(\text{src}(I)\) is within the specified 1D, 2D, 3D, ... boundaries and 0 otherwise.  When the lower and/or upper boundary parameters are scalars, the indices \(I\) at <code>lowerb</code> and <code>upperb</code> in the above formulas should be omitted, but the channel indices remain.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga48af0ab51e36436c5d04340e036ce981">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/da/d97/tutorial_threshold_inRange.html">OpenCV Tutorial: Thresholding Operations using <code>inRange</code></a></li>
+</ul>
+{% endblock %}

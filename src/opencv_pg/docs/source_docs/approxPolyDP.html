@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+approxPolyDP
+{% endblock %}
+
+{% block description %}
+<p>Approximates a polygonal curve(s) with the specified precision. </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.approxPolyDP(curve, epsilon, closed[, approxCurve]) &rarr; approxCurve</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>curve</prmtr> (<ptype>np.ndarray</ptype>): Input vector of a 2D point. Generally obtained by running <code>cv2.findContours</code> and using one contour as this input parameter.</li>
+    <li><prmtr>epsilon</prmtr> (<ptype>float</ptype>): Parameter specifying the approximation accuracy. This is the maximum distance between the original curve and its approximation. Must be positive.</li>
+    <li><prmtr>closed</prmtr> (<ptype>bool</ptype>): If true, the approximated curve is closed (its first and last vertices are connected). Otherwise, it is not closed.  </li>
+    <li><prmtr>approxCurve</prmtr> (optional; <ptype>np.ndarray</ptype>): Result of the approximation. The type should match the type of the input curve. (Similar to dst when a src is provided.) </li>
+</ul>
+
+{% endblock %}
+
+{% block explanation %}
+<p>
+The function <code>approxPolyDP</code> approximates a curve or a polygon with another curve/polygon with less vertices so that the distance between them is less or equal to the specified precision. It uses the <a href="http://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm">Douglas-Peucker algorithm</a>.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga0012a5fdaea70b8a9970165d98722b4c">OpenCV Documentation</a></li>
+    <li><a  href="https://docs.opencv.org/master/dd/d49/tutorial_py_contour_features.html"> OpenCV Tutorial: Contour Features</a></li>
+</ul>
+{% endblock %}

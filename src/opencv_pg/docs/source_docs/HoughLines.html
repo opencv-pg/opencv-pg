@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+HoughLines
+{% endblock %}
+
+{% block description %}
+<p>Finds lines in a binary image using the standard Hough transform.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.HoughLines(image, rho, theta, threshold[, lines[, srn[, stn[, min_theta[, max_theta]]]]]) &rarr; lines</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): 8-bit, single-channel binary source image. The image may be modified by the function.</li>
+    <li><prmtr>lines</prmtr> (<ptype>np.ndarray</ptype>): Output vector of lines. Each line is represented by a two-element vector \((\rho, \theta)\). \(\rho\) is is the distance from the coordinate origin, (0,0) (top left corner of the image). \(\theta\) is the line rotation angle in radians (meaning 0 is a vertical line, and \(\pi/2\) is a horizontal line).</li>
+    <li><prmtr>rho</prmtr> (<ptype>float</ptype>): Distance resolution of the accumulator in pixels.</li>
+    <li><prmtr>theta</prmtr> (<ptype>float</ptype>): Angle resolution of the accumulator in radians.</li>
+    <li><prmtr>threshold</prmtr> (<ptype>int</ptype>): Accumulator threshold parameter. Only lines that get enough votes are returned (larger than this threshold).</li>
+    <li><prmtr>srn</prmtr> (optional; <ptype>float</ptype>): Multi-scale Hough transform parameter. This is a divisor for the distance resolution <code>rho</code>. The coarse accumulator distance resolution is <code>rho</code> and the accurate accumulator resolution is <code>rho/srn</code>. If both <code>srn=0</code> and <code>stn=0</code>, the classical Hough transform is used. Otherwise, both these parameters should be positive. Default is 0.</li>
+    <li><prmtr>stn</prmtr> (optional; <ptype>float</ptype>): Multi-scale Hough transform parameter. This is a divisor for the distance resolution <code>theta</code>. Default is 0.</li>
+    <li><prmtr>min_theta</prmtr> (optional; <ptype>float</ptype>): Minimum angle to check for lines. Must fall between 0 and <code>max_theta</code>. Default is 0.</li>
+    <li><prmtr>max_theta</prmtr> (optional; <ptype>float</ptype>): For standard and multi-scale Hough transform, maximum angle to check for lines. Must fall between <code>min_theta</code> and <code>CV_PI</code>. Default is <code>CV_PI</code>.</li>
+</ul>
+{% endblock %}
+
+
+{% block explanation %}
+<p>
+    In general, lines can be represented by the equation \(\rho = x \cos \theta + y \cos \theta\), where \(\theta\) lies in the range \([0, \pi]\) and \(\rho\) has a finite range determined by the image. The parameters \(\rho\) and \(\theta\) in the function signature determine how many pieces these finite ranges are partitioned into.  For each pixel \((x,y)\) in the image, and for each value of \(\theta\), the value of \(\rho\) can be determined by the line equation.  This value is then used to update an accumulator matrix to track the number of pixels satisfying each potential combination of \(\rho\) and \(\theta\).
+</p>
+
+<p>
+    Once the accumulator matrix has been constructed, the threshold parameter determines which entries in the accumulator matrix are large enough (have enough pixels mapped) to form a line.  A larger threshold value will result in fewer lines.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga46b4e588934f6c8dfd509cc6e0e4545a">OpenCV Documentation</a></li>
+    <li><a href="https://www.learnopencv.com/hough-transform-with-opencv-c-python/">Learn OpenCV: Hough Transform with OpenCV</a></li>
+</ul>
+{% endblock %}

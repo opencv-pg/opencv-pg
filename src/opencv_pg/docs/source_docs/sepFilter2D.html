@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+sepFilter2D
+{% endblock %}
+
+{% block description %}
+<p>Applies a separable linear filter to an image. </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.sepFilter2D(src, ddepth, kernelX, kernelY[, dst[, anchor[, delta[, borderType]]]])  &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image. The image can have any number of channels, which are processed independently, but the depth should be <code>cv2.CV_8U</code>, <code>cv2.CV_16U</code>, <code>cv2.CV_16S</code>, <code>cv2.CV_32F</code> or <code>cv2.CV_64F</code>.</li>
+    <li><prmtr>ddepth</prmtr> (<a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#filter_depths"><code>cv2.CV_*</code></a>): Output image depth. Recommended value is -1 to use <code>src1.depth()</code>, and this is used in this app.</li>
+    <li><prmtr>kernelX</prmtr> (<ptype>np.ndarray</ptype>): Coefficients for filtering each row. Identity kernel would be [0,1,0]. </li>
+    <li><prmtr>kernelY</prmtr> (<ptype>np.ndarray</ptype>): Coefficients for filtering each column. Identity kernel would be [0,1,0].</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same size and number of channels as <code>src</code>. </li>
+    <li><prmtr>anchor</prmtr> (optional; <ptype>tuple: (int, int)</ptype>): Anchor point; default value (-1, -1) means that the anchor is at the kernel center. The tuple represents (column, row) rather than (row, column).</li>
+    <li><prmtr>delta</prmtr> (optional; <ptype>float</ptype>): Value added to the filtered results before storing them. 0 is the default value. </li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. One of the following: 
+    <ul>
+        <li>BORDER_CONSTANT</li>
+        <li>BORDER_REPLICATE</li>
+        <li>BORDER_REFLECT</li>
+        <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+        <li>BORDER_ISOLATED</li>
+	</ul> </li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>BORDER_WRAP and BORDER_TRANSPARENT are not supported.</li>
+    <li>If you want to use BORDER_CONSTANT, you should manually add border to your image with <code>copyMakeBorder</code>, otherwise the default value is set to 0.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+The function applies a separable linear filter to the image in two steps. That is, first, every row of <code>src</code> is filtered with the 1D kernel, <code>kernelX</code>. Then, every column of the result is filtered with the 1D kernel, <code>kernelY</code>. The final result is shifted by <code>delta</code> is stored in <code>dst</code>.
+</p>
+
+<p>
+    For example, consider the following image.
+
+    <td align="center" valign="center">
+        <img src="../source_docs/sepFilter2D/img1.png" alt="Original" />
+        <br />
+    </td>
+
+    We can apply <code>sepFilter2D</code> with <code>kernelX=[1,2,1]</code> and <code>kernelY=[0,1,0]</code> (the identity kernel) to get the following image, illustrating a 1-dimensional kernel across X.
+
+    <td align="center" valign="center">
+        <img src="../source_docs/sepFilter2D/img1x.png" alt="1D across X" />
+        <br />
+    </td>
+
+    Alternatively, we can apply <code>sepFilter2D</code> with <code>kernelX=[0,1,0]</code> (the identity kernel) and <code>kernelY=[1,0,-1]</code> to get the following image, illustrating a 1-dimensional kernel across Y.
+
+    <td align="center" valign="center">
+        <img src="../source_docs/sepFilter2D/img1y.png" alt="1D across Y" />
+        <br />
+    </td>
+
+    Lastly, we can apply both non-identity 1-dimensional kernels at the same time using <code>sepFilter2D</code> with <code>kernelX=[1,2,1]</code> and <code>kernelY=[1,0,-1]</code> to get the following image, illustrating a 2-dimensional kernel across X and Y.
+
+    <td align="center" valign="center">
+        <img src="../source_docs/sepFilter2D/img1sep2d.png" alt="2D sequentially across X and Y" />
+        <br />
+        </td>
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#ga910e29ff7d7b105057d1625a4bf6318d">OpenCV Documentation</a></li>
+    <li><a href="https://stackoverflow.com/questions/55869380/i-am-confused-using-the-opencv-sepfilter2d-functions-kernelx-and-kernely">StackOverflow: Explanation of kernels</a></li>
+    <li><a href="https://dsp.stackexchange.com/questions/52479/prove-that-convolution-with-a-separable-filter-is-equivalent-to-convolution-on-e">StackExchange: 2D filter is equivalent to sequential 1D filters</a></li>
+</ul>
+{% endblock %}

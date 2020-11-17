@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+getGaussianKernel
+{% endblock %}
+
+{% block description %}
+<p>Computes and returns the <code>ksize x 1</code> matrix of Gaussian filter coefficients.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.getGaussianKernel(ksize, sigma[, ktype]) &rarr; retval</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>ksize</prmtr> (<ptype>int</ptype>): Aperture size. Must be positive and odd.</li>
+    <li><prmtr>sigma</prmtr> (<ptype>float</ptype>): Gaussian standard deviation.   If it is non-positive, it’s computed from <code>ksize</code> as <code>sigma = 0.3*(0.5*(ksize – 1)-1)+0.8</code> .</li>
+    <li><prmtr>ktype</prmtr> (optional; <code>cv2.CV_*</code>): Type of filter coefficients. May be <code>cv2.CV_32F</code> or <code>cv2.CV_64F</code> (default).</li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>Two of such generated kernels can be passed to <code>sepFilter2D()</code> or to <code>createSeparableLinearFilter()</code>. Those functions automatically recognize smoothing kernels (symmetrical kernels with sum of weights equal to 1) and handle them accordingly. </li>
+    <li>May also use the higher level <code>GaussianBlur()</code>.</li>
+    <li>The function will accept positive even integers for ksize but is inappropriate for use. </li>
+    <li>Sigma controls how wide or narrow the kernel function will be. Higher sigma vaues blur over a wider radius. Higher values force a kernel matrix to capture enough of the function's energy (<a href="https://stackoverflow.com/questions/3149279/optimal-sigma-for-gaussian-filtering-of-an-image">source</a>).The function will not force a larger kernel size with a large sigma.</li>
+    
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    This function computes and returns the ksize x 1 matrix of Gaussian filter coefficients: 
+</p>
+\[G_i\ =\ \alpha\ *\ e^\frac{-\left(i-(ksize-1))/2\right)^2}{2*{\rm sigma}^2}\]
+
+<p>Where \(i= 0…ksize-1\) and \(\alpha\) is the scaling factor so that \(\sum_{i} G_i=1 \).</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gac05a120c1ae92a6060dd0db190a61afa">OpenCV Documentation</a></li>
+    <li><a href="https://stackoverflow.com/questions/3149279/optimal-sigma-for-gaussian-filtering-of-an-image">Sigma Information Source</a></li>
+</ul>
+{% endblock %}

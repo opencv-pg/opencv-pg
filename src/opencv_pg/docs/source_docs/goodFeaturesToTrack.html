@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+goodFeaturesToTrack
+{% endblock %}
+
+{% block description %}
+<p>Determines strong corners on an image.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.goodFeaturesToTrack(image, maxCorners, qualityLevel, minDistance[, corners[, mask[, blockSize[, useHarrisDetector[, k]]]]]) &rarr; corners</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): Input 8-bit or floating-point 32-bit, single-channel image.</li>
+    <li><prmtr>corners</prmtr> (<ptype>np.ndarray</ptype>): Output vector of detected corners.</li>
+    <li><prmtr>maxCorners</prmtr> (<ptype>int</ptype>): Maximum number of corners to return. If there are more corners than are found, the strongest of them is returned. Setting <code>maxCorners=0</code> implies that no limit on the maximum is set and all detected corners are returned.</li>
+    <li><prmtr>qualityLevel</prmtr> (<ptype>float</ptype>): Parameter characterizing the minimal accepted quality of image corners. The parameter value is multiplied by the best corner quality measure, which is the minimal eigenvalue (see <code>cornerMinEigenVal</code>) or the Harris function response (see <code>cornerHarris</code>). The corners with the quality measure less than the product are rejected. For example, if the best corner has the quality measure 1500, and <code>qualityLevel=0.01</code>, then all the corners with the quality measure less than 15 are rejected.</li>
+    <li><prmtr>minDistance</prmtr> (<ptype>float</ptype>): Minimum possible Euclidean distance between the returned corners.</li>
+    <li><prmtr>mask</prmtr> (optional; <ptype>np.ndarray</ptype>): Optional region of interest. If the image is not empty (it needs to have the type <code>CV_8UC1</code> and the same size as <code>image</code>), it specifies the region in which the corners are detected. Default is None.</li>
+    <li><prmtr>blockSize</prmtr> (optional; <ptype>int</ptype>): Size of an average block for computing a derivative covariation matrix over each pixel neighborhood. See <code>cornerEigenValsAndVecs</code>. Default is 3.</li>
+    <li><prmtr>useHarrisDetector</prmtr> (optional; <ptype>bool</ptype>): Parameter indicating whether to use a Harris detector (see <code>cornerHarris</code>) or <code>cornerMinEigenVal</code>. Default is False.</li>
+    <li><prmtr>k</prmtr> (optional; <ptype>float</ptype>): Free parameter of the Harris detector. Default is <code>k=0.04</code>.</li>
+</ul>
+
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function finds the most prominent corners in the image or in the specified image region, as described in [215].  
+    <ul>
+        <li>It calculates the corner quality measure at every source image pixel using the <code>cornerMinEigenVal</code> or <code>cornerHarris</code>.</li>
+        <li>It then performs a non-maximum suppression (the local maximums in \(3 \times 3\) neighborhood are retained).</li>
+        <li>The corners with the minimal eigenvalue less than \(\texttt{qualityLevel} \times max_{x,y} (\texttt{qualityMeasureMap}(x,y))\) are rejected.</li>
+        <li>The remaining corners are sorted by the quality measure in the descending order.</li>
+        <li>The function throws away each corner for which there is a stronger corner at a distance less than <code>maxDistance</code>.</li>
+    </ul>
+</p>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>The function can be used to initialize a point-based tracker of an object.</li>
+    <li>If the function is called with different values A and B of the parameter <code>qualityLevel</code> and A > B, the vector of returned corners with <code>qualityLevel=A</code> will be the prefix of the output vector with <code>qualityLevel=B</code>.</li>
+</ul>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga1d6bb77486c8f92d79c8793ad995d541">OpenCV Documentation</a></li>
+    <li>[215]: <a href="https://ieeexplore.ieee.org/abstract/document/323794">Jianbo Shi and Carlo Tomasi. Good features to track. In Computer Vision and Pattern Recognition, 1994. Proceedings CVPR'94., 1994 IEEE Computer Society Conference on, pages 593–600. IEEE, 1994.</a></li>
+</ul>
+{% endblock %}

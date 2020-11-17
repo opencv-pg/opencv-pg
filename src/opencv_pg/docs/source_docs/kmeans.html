@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+kmeans
+{% endblock %}
+
+{% block description %}
+<p>Finds centers of clusters and groups input samples around the clusters.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.kmeans(data, K, bestLabels, criteria, attempts, flags[, centers]) &rarr; retval, bestLabels, centers</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>data</prmtr> (<ptype>np.ndarray</ptype>): Data for clustering. An array of N-Dimensional points with float coordinates is needed.</li>
+    <li><prmtr>K</prmtr> (<ptype>int</ptype>): Number of clusters to split the set by.</li>
+    <li><prmtr>bestLabels</prmtr> (<ptype>np.ndarray</ptype>): Input/output integer array that stores the cluster indices for every sample.</li>
+    <li><prmtr>critera</prmtr> (<a href="https://docs.opencv.org/master/d9/d5d/classcv_1_1TermCriteria.html#ae3130f54d419687a87349da94df1226b"><code>cv2.TERM_CRITERIA_*</code></a>): The algorithm termination criteria, that is, the maximum number of iterations and/or the desired accuracy. See note below.</li>
+    <li><prmtr>attempts</prmtr> (<ptype>int</ptype>): Specifies the number of times the algorithm is executed using different initial labellings. The algorithm returns the labels that yield the best compactness (see the last function parameter).</li>
+    <li><prmtr>flags</prmtr> (<a href="https://docs.opencv.org/master/d0/de1/group__core.html#ga276000efe55ee2756e0c471c7b270949"><code>cv2.KMEANS_*</code></a>): Flag that can take the following values:
+        <ul>
+            <li><code>KMEANS_RANDOM_CENTERS</code>: Select random initial centers in each attempt.</li>
+            <li><code>KMEANS_PP_CENTERS</code>: Use <code>kmeans++</code> center initialization by Arthur and Vassilvitskii <a href="http://ilpubs.stanford.edu:8090/778/">[Arthur2007]</a>.</li>
+            <li><code>KMEANS_USE_INITIAL_LABELS</code>: During the first (and possibly the only) attempt, use the user-supplied labels instead of computing them from the initial centers. For the second and further attempts, use the random or semi-random centers. Use one of <code>KMEANS_*_CENTERS</code> flag to specify the exact method.</li>
+        </ul>
+    </li>
+    <li><prmtr>centers</prmtr> (optional; <ptype>np.ndarray</ptype>): Output matrix of the cluster centers, one row per each cluster center.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function <code>kmeans</code> implements a k-means algorithm that finds the centers of <code>K</code> clusters and groups the input samples around the clusters. As an output, <code>bestLabels[i]</code> contains a 0-based cluster index for the sample stored in the \(i^{th}\) row of the samples matrix.
+</p>
+
+<p>
+    The function returns <code>retVal</code>, the compactness measure that is computed as $$\sum_i \| \text{samples}_i - \text{centers}_{\text{labels}_i} \|^2$$
+    after every attempt. The best (minimum) value is chosen and the corresponding labels and the compactness value are returned by the function. 
+</p>
+{% endblock %}
+
+{% block notes %}
+<p>
+    <ul>
+        <li>The Python signature for this function has changed between OpenCV versions 2.4 and 4.4, so it is recommended to use parameter names in the function call.</li>
+        <li>The parameter <code>criteria</code> of type <code>TermCriteria</code> contains three pieces of important information:
+            <ul>
+                <li><code>criteria.type</code>: The type of termination criteria. One of iterations (<code>cv2.TERM_CRITERIA_COUNT</code>), epsilon (<code>cv2.TERM_CRITERIA_EPS</code>), or both (<code>cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_COUNT</code>; will stop when first is met).</li>
+                <li><code>criteria.maxCount</code> (<ptype>int</ptype>): The maximum number of iterations or elements to compute.</li>
+                <li><code>criteria.epsilon</code> (<ptype>float</ptype>): The desired accuracy or change in parameters at which the iterative algorithm stops.</li>
+            </ul>
+            All three of these must be specified to define <code>criteria</code>, even if only using one stopping condition.</li>
+        <li>You can use only the core of the function, set the number of attempts to 1, initialize labels each time using a custom algorithm, pass them with the (<code>flags = KMEANS_USE_INITIAL_LABELS</code>) flag, and then choose the best (most-compact) clustering.</li>
+    </ul>
+</p>
+{% endblock %}
+
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d5/d38/group__core__cluster.html#ga9a34dc06c6ec9460e90860f15bcd2f88">OpenCV Documentation</a></li>
+</ul>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}
+addWeighted
+{% endblock %}
+
+{% block description %}
+<p>Calculates the weighted sum of two arrays.  </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.addWeighted(src1, alpha, src2, beta, gamma[, dst[, dtype]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src1</prmtr> (<ptype>np.ndarray</ptype>): Input image array. The image can have any number of channels, which are processed independently, but the depth should be <code>cv2.CV_8U</code>, <code>cv2.CV_16U</code>, <code>cv2.CV_16S</code>, <code>cv2.CV_32F</code> or <code>cv2.CV_64F</code>.</li>
+    <li><prmtr>alpha</prmtr> (<ptype>float</ptype>): Weight of the first array elements.</li>
+    <li><prmtr>src2</prmtr> (<ptype>np.ndarray</ptype>): Second input array of the same size and channel number as <code>src1</code>.</li>
+    <li><prmtr>beta</prmtr> (<ptype>float</ptype>): Weight of the second array elements. </li>
+    <li><prmtr>gamma</prmtr> (<ptype>float</ptype>): Scalar added to each sum. </li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same size and number of channels as <code>src1</code> and <code>src2</code>. </li>
+    <li><prmtr>dtype</prmtr> (optional; <a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#filter_depths"><code>cv2.CV_*</code></a>): Output image depth. Default is -1 to use <code>src1.depth()</code>, and this is used in this app.</li>
+</ul>
+
+{% endblock %}
+
+{% block notes %}
+
+<p>Saturation is not applied when the output array has the depth CV_32S. You may even get result of an incorrect sign in the case of overflow.</p>
+
+{% endblock %}
+
+{% block explanation %}
+<p>
+The function <code>addWeighted</code> calculates the weighted sum of two arrays as follows: <br><br>
+
+<code>dst(I)=saturate(src1(I) x alpha + src2(I) x beta + gamma)</code>
+<br><br>
+where <code>I</code> is a multi-dimensional index of array elements. In case of multi-channel arrays, each channel is processed independently. The function can be replaced with a matrix expression: 
+<br><br>
+<code>dst = src1 x alpha + src2 x beta + gamma </code>
+
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/d2/de8/group__core__array.html#gafafb2513349db3bcff51f54ee5592a19">OpenCV Documentation</a></li>
+    <li><a  href="https://stackoverflow.com/questions/15245262/opencv-mat-element-types-and-their-sizes">StackOverflow: Depth Types</a></li>
+</ul>
+{% endblock %}

@@ -1,0 +1,2 @@
+recursive-include src/opencv_pg/docs/ *
+include src/opencv_pg/robot.jpg

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+merge
+{% endblock %}
+
+{% block description %}
+<p>Creates one multichannel array out of several single-channel ones.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.merge(mv[, dst]) → dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>mv</prmtr> (<ptype>array of np.ndarrays</ptype>): List of single channels to be merged</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output array of the same size and the same depth as <code>mv[0]</code>; The number of channels will be the total number of channels in the matrix array.</li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>The function <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga8027f9deee1e42716be8039e5863fbd9"><code>split()</code></a> does the reverse operation. If you need to shuffle channels in some other advanced way, use <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga89dd05fd8fe54f5b7b5d89bca21153a1"><code>mixChannels()</code></a>.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    This function merges separate single-channel arrays into a multi-channel array: \(\text{dst}(I)_c = \text{mv}[c](I)\). This is most commonly used to merge separate image planes for B, G, and R channels into a color image.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga61f2f2bde4a0a0154b2333ea504fab1d">OpenCV Documentation</a></li>
+</ul>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+cornerEigenValsAndVecs
+{% endblock %}
+
+{% block description %}
+<p>Calculates eigenvalues and eigenvectors of image blocks for corner detection. </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.cornerEigenValsAndVecs(src, blockSize, ksize[, dst[, borderType]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input single-channel 8-bit or floating-point image. </li>
+    <li><prmtr>blockSize</prmtr> (<ptype>int</ptype>):  Neighborhood size (see details below). Must be positive.</li>
+    <li><prmtr>ksize</prmtr> (<ptype>int</ptype>): Aperture parameter for the Sobel operator. Must be a positive odd integer &#60; 8.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Image to store the results. It has the same size as <code>src</code> and the type CV_32FC. </li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. One of the following: 
+    <ul>
+        <li>BORDER_CONSTANT</li>
+        <li>BORDER_REPLICATE</li>
+        <li>BORDER_REFLECT</li>
+        <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+        <li>BORDER_ISOLATED</li>
+    </ul> </li>
+</ul>
+
+{% endblock %}
+
+{% block notes %}
+
+<ul>
+    <li>BORDER_WRAP and BORDER_TRANSPARENT are not supported for <code>borderType</code>.</li>
+    <li>If you want to use BORDER_CONSTANT, you should manually add border to your image with <code>copyMakeBorder</code>, otherwise the default value is set to 0.</li>
+    <li>Please note that while positive odd integers less than or equal to 31 are accepted for <code>ksize</code>, when <code>ksize</code> is larger than 7, it only pads the kernel with zeros (<a href="https://stackoverflow.com/questions/52978180/opencv-sobel-kernel-aperture-size-7-or-31">Source</a>).</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+For every pixel p, the function considers a <code>blockSize</code> \(\times\) <code>blockSize</code> neighborhood <i>S(p)</i>. It calculates the covariation matrix of derivatives over the neighborhood as:
+
+$$M=\left[\begin{matrix}\sum_{S(p)}{(dI/dx)}^2&\sum_{S(p)}{dI/dx\ dI/dy}\\\sum_{S(p)}{dI/dx\ dI/dy}&\sum_{S(p)}{dI/dx\ dI/dy}\\\end{matrix}\right]$$
+
+where the derivatives are computed using the Sobel operator.  After that, it finds eigenvectors and eigenvalues of <i>M</i> and stores them in the destination image as (\(\lambda_1,\ \lambda_2,\ x_1,\ y_1,\ x_2,\ y_2 \)) where:
+
+<ul><li>\(\lambda_1,\ \lambda_2 \) are the non-sorted eigenvalues of M</li>
+<li>\(x_1,\ y_1 \) are the eigenvectors corresponding to \(\lambda_1 \)</li>
+<li>\(x_2,\ y_2 \) are the eigenvectors corresponding to \(\lambda_2 \)</li>
+</ul>
+
+The output of the function can be used for robust edge or corner detection.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga4055896d9ef77dd3cacf2c5f60e13f1c">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/d9/dbc/tutorial_generic_corner_detector.html">OpenCV Tutorial: Creating Your Own Corner Detector</a></li>
+</ul>
+
+{% endblock %}

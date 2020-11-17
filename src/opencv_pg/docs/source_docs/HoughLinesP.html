@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+HoughLinesP
+{% endblock %}
+
+{% block description %}
+<p>Finds line segments in a binary image using the probabilistic Hough transform.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.HoughLinesP(image, rho, theta, threshold[, lines[, minLineLength[, maxLineGap]]]) &rarr; lines</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): 8-bit, single-channel binary source image. The image may be modified by the function.</li>
+    <li><prmtr>rho</prmtr> (<ptype>float</ptype>): Distance resolution of the accumulator in pixels.</li>
+    <li><prmtr>theta</prmtr> (<ptype>float</ptype>): Angle resolution of the accumulator in radians.</li>
+    <li><prmtr>threshold</prmtr> (<ptype>int</ptype>): Accumulator threshold parameter. Only  lines with enough votes are returned (larger than this threshold).</li>
+    <li><prmtr>lines</prmtr> (optional; <ptype>np.ndarray</ptype>): Output vector of lines. Each line is represented by a 4-element vector \((x_1, y_1, x_2, y_2)\), where \((x_1,y_1)\) and \((x_2, y_2)\) are the ending points of each detected line segment.</li>
+    <li><prmtr>minLineLength</prmtr> (optional; <ptype>float</ptype>): Minimum line length. Line segments shorter than that are rejected. Default is 0.</li>
+    <li><prmtr>maxLineGap</prmtr> (optional; <ptype>float</ptype>): Maximum allowed gap between points on the same line to link them. Default is 0.</li>
+</ul>
+{% endblock %}
+
+
+{% block notes %}
+<ul>
+    <li>The function implements the probabilistic Hough transform algorithm for line detection, described in [Matas00].</li>
+    <li>Due to the parameter <code>lines</code> in the middle of the function signature, it is good practice to use the parameter names when calling this function.  For example, <code>lines = cv2.HoughLinesP(img, rho=1, theta=1*np.pi/180, threshold=100, minLineLength=100, maxLineGap=50)</code>.</li>
+</ul>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga8618180a5948286384e3b7ca02f6feeb">OpenCV Documentation</a></li>
+    <li><a href="https://www.learnopencv.com/hough-transform-with-opencv-c-python/">Learn OpenCV: Hough Transform with OpenCV</a></li>
+    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S1077314299908317">[MATAS00]</a>: Matas, J. and Galambos, C. and Kittler, J.V., Robust Detection of Lines Using the Progressive Probabilistic Hough Transform. CVIU 78 1, pp 119-137 (2000)</li>
+</ul>
+{% endblock %}

@@ -1,0 +1,33 @@
+body {
+    margin: 10px;
+}
+
+h1 {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+refli {
+    margin: 0px 0; 
+}
+
+li {
+    margin: 10px 0;
+}
+
+li ul li {  
+    margin: 0px 0; 
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+prmtr {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+ptype {
+    font-style: italic;
+}

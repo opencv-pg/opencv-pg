@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+Canny
+{% endblock %}
+
+{% block description %}
+<p>Finds edges in an image using the <a href="https://ieeexplore.ieee.org/abstract/document/4767851">[Canny86]</a> algorithm.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.Canny(image, threshold1, threshold2[, edges[, apertureSize[, L2gradient]]]) &rarr; edges</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): Single-channel 8-bit input image.</li>
+    <li><prmtr>threshold1</prmtr> (<ptype>float</ptype>): First threshold for the hysteresis procedure. See notes.</li>
+    <li><prmtr>threshold2</prmtr> (<ptype>float</ptype>): Second threshold for the hysteresis procedure. See notes.</li>
+    <li><prmtr>edges</prmtr> (optional; <ptype>np.ndarray</ptype>): Output edge map; single channels 8-bit image, which has the same size as <code>image</code>.</li>
+    <li><prmtr>apertureSize</prmtr> (optional; <ptype>int</ptype>): Aperture size for the <code>Sobel()</code> operator. Default is 3.</li>
+    <li><prmtr>L2gradient</prmtr> (optional; <ptype>bool</ptype>): A flag, indicating whether a more accurate L2 norm \(L_2 =\sqrt{(dI/dx)^2 + (dI/dy)^2}\) should be used to calculate the image gradient magnitude (<code>L2gradient=True</code>), or whether the default L1 norm \(L_1 = |dI/dx|+|dI/dy|\) is enough (<code>L2gradient=False</code>).</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function finds edges in the input image and marks them in the output map, <code>edges</code>, using the Canny algorithm. The smallest value between <code>threshold1</code> and <code>threshold2</code> is used for edge linking. The largest value is used to find initial segments of strong edges.
+</p>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>The threshold parameters determine if a pixel is selected as an edge pixel based on the pixel's gradient. To do this the function examines the intensity gradient following a procedure analgous to <code>Sobel()</code>.
+        <ul>
+            <li>If the gradient is <b>larger</b> than the <b>higher</b> threshold, it will be selected as an edge pixel.</li>
+            <li>If the gradient is <b>smaller</b> than the <b>lower</b> threshold, it will not be considered.</li>
+            <li>If the gradient is <b>between the threshold values</b>, then it will only be selected if it is connected an existing edge pixel.</li>
+            <li>Canny recommended a upper:lower ratio between 2:1 and 3:1.</li>
+        </ul>
+    </li>
+         
+</ul>
+{% endblock %}
+
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga04723e007ed888ddf11d9ba04e2232de">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/da/d5c/tutorial_canny_detector.html">OpenCV Tutorial: Canny Edge Detector</a></li>
+    <li><a href="https://ieeexplore.ieee.org/abstract/document/4767851">[Canny86]</a>: J. Canny. A Computational Approach to Edge Detection, IEEE Trans. on Pattern Analysis and Machine Intelligence, 8(6), pp. 679-698 (1986).</li>
+    <li><a href="http://en.wikipedia.org/wiki/Canny_edge_detector">Wikipedia: Canny Edge Detector</a></li>
+</ul>
+{% endblock %}

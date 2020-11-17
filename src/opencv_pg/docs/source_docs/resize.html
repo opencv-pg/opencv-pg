@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}
+resize
+{% endblock %}
+
+{% block description %}
+<p>This function resizes the image down to or up to the specified size.   </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.resize(src, dsize[, dst[, fx[, fy[,interpolation]]]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image. The image can have any number of channels, which are processed independently, but the depth should be <code>cv2.CV_8U</code>, <code>cv2.CV_16U</code>, <code>cv2.CV_16S</code>, <code>cv2.CV_32F</code> or <code>cv2.CV_64F</code>.</li>
+    <li><prmtr>dsize</prmtr> (<ptype>tuple: (int, int)</ptype>): output image size; if it equals zero, it is computed as
+    <code>dsize = Size(round(fx * src.cols), round(fy * src.rows))</code>.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output destination file.</li>
+    <li><prmtr>fx</prmtr> (optional; <ptype>float</ptype>): Scaling factor along horizontal axis. When set to 0, it is computed as <code>(double)dsize.width/src.cols</code>. Default is 0. </li>
+    <li><prmtr>fy</prmtr> (optional; <ptype>float</ptype>): Scaling factor along vertical axis. When set to 0, it is computed as <code>(double)dsize.height/src.rows</code>. Default is 0.</li>
+    <li><prmtr>interpolation</prmtr> (optional; <a href="https://docs.opencv.org/master/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121"><code>cv2.INTER_*</code></a>): Interpolation method. INTER_LINEAR is default. Choose from:
+	<ul>
+        <li>INTER_NEAREST</li>
+	    <li>INTER_LINEAR</li>
+	    <li>INTER_AREA</li>
+	    <li>INTER_CUBIC</li>
+	    <li>INTER_LANCZOS4</li>
+    </ul></li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>Either <code>dsize</code> or both <code>fx</code> and <code>fy</code> must be non-zero.</li>
+	<li>The initial <code>dst</code> type or size are not taken into account. Instead the size and type are derived from the <code>src</code>, <code>dsize</code>, <code>fx</code>, and <code>fy</code>.</li>
+	
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    Resizing, by default, does only change the width and height of the image. The aspect ratio can be preserved or not, based on the requirement.
+    
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/da/d54/group__imgproc__transform.html#ga47a974309e9102f5f08231edc7e7529d">OpenCV Documentation</a></li>
+</ul>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+Sobel
+{% endblock %}
+
+{% block description %}
+<p>Calculates the first, second, third, or mixed image derivatives using an extended Sobel operator. </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.Sobel(src, ddepth, dx, dy[, dst[, ksize[, scale[, delta[, borderType]]]]])  &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image. The image can have any number of channels, which are processed independently.</li>
+    <li><prmtr>ddepth</prmtr> (<a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#filter_depths"><code>cv2.CV_*</code></a>): output image depth. Recommended value is -1 to use <code>src1.depth()</code>, and this is used in this app.</li>
+    <li><prmtr>dx</prmtr> (<ptype>int</ptype>): Order of the derivative x. Must be at least 0, and limited to either <code>dx=1</code> or <code>dx=2</code> in this app.</li>
+    <li><prmtr>dy</prmtr> (<ptype>int</ptype>): Order of the derivative y. Must be at least 0, and limited to either <code>dy=1</code> or <code>dy=2</code> in this app.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same size and number of channels as <code>src</code>. </li>
+    <li><prmtr>ksize</prmtr> (optional; <ptype>int</ptype>): Size of the extended Sobel kernel. Default is 3. Must be an odd integer that is at least 1 and at most 7.</li>
+    <li><prmtr>scale</prmtr> (optional; <ptype>float</ptype>): Scale factor for the computed derivative. Default is no scaling, or <code>scale=1</code>.</li>
+    <li><prmtr>delta</prmtr> (optional; <ptype>float</ptype>): Delta value that is added to the results before storing them in <code>dst</code>. Default is 0.</li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. One of the following:
+	<ul>
+        <li>BORDER_CONSTANT</li>
+        <li>BORDER_REPLICATE</li>
+        <li>BORDER_REFLECT</li>
+        <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+        <li>BORDER_ISOLATED</li>
+	</ul> </li>
+</ul>
+
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>Setting <code>ksize=1</code> is only valid for the first or the second x- or y- derivatives.</li>
+    <li>When <code>ksize=3</code>, the Sobel kernel may produce noticeable inaccuracies. OpenCV addresses this inaccuracy for kernels of size 3 by using the <code>Scharr()</code> function. This is as fast but more accurate than the standard Sobel function.</li>
+    <li>Please note that while positive odd integers less than or equal to 31 are accepted for <code>ksize</code>, when <code>ksize</code> is larger than 7, it simply pads the kernel with 0's and does not produce different results (<a href="https://stackoverflow.com/questions/52978180/opencv-sobel-kernel-aperture-size-7-or-31">Source</a>).</li>
+    <li>BBORDER_WRAP and BORDER_TRANSPARENT are not available options for <code>borderType</code>.</li>
+    <li>If you want to use BORDER_CONSTANT, you should manually add border to your image with <code>copyMakeBorder</code>, otherwise the default value is set to 0.</li>
+    <li>When <code>ddepth=-1</code>, the destination image will have the same depth as the source; in the case of 8-bit unsigned input images it will result in truncated derivatives. That is, the Sobel function will have a negative value after the derivative is obtained, and a value greater than 255. The original image is <code>uint8</code>, which is an 8-bit unsigned number, so the number of bits created by Sobel is not enough and so there will be truncation (<a href="https://www.programmersought.com/article/3018505971/">source</a>). It is better to use 64 bit float input images and convert to 8 bit unsigned later. Please see this <a href="https://handmap.github.io/gradients-and-edge-detection/">link</a> for more information. </li>
+    <li>Most often, the function is called with (<code>dx=1, dy=0, ksize=3</code>) or (<code>dx=0, dy=1, ksize=3</code>) to calculate the first \(x\)- or \(y\)- image derivative. The first case corresponds to a kernel of:
+
+    $$\left[\begin{matrix}-1&0&1\\-2&0&2\\-1&0&1\\\end{matrix}\right]$$
+    
+    The second case corresponds to a kernel of:
+    
+    $$\left[\begin{matrix}-1&-2&-1\\0&0&0\\1&2&1\\\end{matrix}\right]$$</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+This function calculates the first, second, third, or mixed image derivatives using an extended Sobel operator.  In most cases, the <code>ksize</code> \(\times\) <code>ksize</code> separable kernel is used to calculate the derivative. The exception occurs when <code>ksize=1</code>, and the \(3 \times 1\) or \(1 \times 3\) kernel is used and no Gaussian smoothing is performed.
+</p>
+
+<p>
+The function calculates an image derivative by convolving the image with the appropriate kernel:
+
+$$\texttt{dst}=\frac{\partial^{\texttt{dx}+\texttt{dy}} \texttt{src}} { {\partial x}^{\texttt{dx}}{\partial y}^{\texttt{dy}}}$$
+
+The Sobel operators combine Gaussian smoothing and differentiation, so the result is more or less resistant to the noise. 
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gacea54f142e81b6758cb6f375ce782c8d">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/d2/d2c/tutorial_sobel_derivatives.html">OpenCV Tutorial: Sobel Derivatives</a></li>
+</ul>
+{% endblock %}

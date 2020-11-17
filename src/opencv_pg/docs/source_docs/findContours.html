@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+findContours
+{% endblock %}
+
+{% block description %}
+<p>Finds contours in a binary image.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.findContours(image, mode, method[, contours[, hierarchy[, offset]]]) &rarr; contours, hierarchy</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): Source, an 8-bit single-channel image. Non-zero pixels are treated as 1's. Zero pixels remain 0's, so the image is treated as binary. </li>
+    <li><prmtr>mode</prmtr> (<a href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga819779b9857cc2f8601e6526a3a5bc71"><code>cv2.RETR_*</code></a>): Contour retrieval mode.</li>
+    <li><prmtr>method</prmtr> (<a href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga4303f45752694956374734a03c54d5ff"><code>cv2.CHAIN_APPROX_*</code></a>): Contour approximation method.</li>
+    <li><prmtr>contours</prmtr> (optional; <ptype>array of np.ndarrays</ptype>): Detected contours. Each contour is stored as an array of points.</li>
+    <li><prmtr>hierarchy</prmtr> (optional; <ptype>np.ndarray</ptype>): Optional output varray, containing information about the image topology. It has as many elements as the number of contours. For each i-th contour <code>contours[i]</code>, the elements <code>hierarchy[i][0]</code>, <code>hierarchy[i][1]</code>, <code>hierarchy[i][2]</code>, and <code>hierarchy[i][3]</code> are set to 0-based indices in contours of the next and previous contours at the same hierarchical level, the first child contour and the parent contour, respectively. If for the contour i there are no next, previous, parent, or nested contours, the corresponding elements of <code>hierarchy[i]</code> will be negative.</li>
+    <li><prmtr>offset</prmtr> (optional; <code>cv2.POINT</code>): Optional offset by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</li>
+</ul>
+
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function retrieves contours from the binary image using the algorithm [224]. The contours are a useful tool for shape analysis and object detection and recognition. 
+</p>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>Since OpenCV 3.2, the source image is not modified by this function.</li>
+    <li>You can use <code>compare</code>, <code>inRange</code>, <code>threshold</code>, <code>adaptiveThreshold</code>, <code>Canny</code>, and others to create a binary image out of a grayscale or color one. In this app, we simply set all pixels above threshold to 255 and all pixels below threshold to 0.</li>
+    <li>If mode equals to RETR_CCOMP or RETR_FLOODFILL, the input can also be a 32-bit integer image of labels (CV_32SC1).</li>
+</ul>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#gae4156f04053c44f886e387cff0ef6e08">OpenCV Documentation</a></li>
+    <li>[224] <a href="https://www.sciencedirect.com/science/article/pii/0734189X85900167">Satoshi Suzuki and others. Topological structural analysis of digitized binary images by border following. Computer Vision, Graphics, and Image Processing, 30(1):32–46, 1985.</a></li>
+</ul>
+{% endblock %}

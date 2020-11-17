@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+cornerSubPix
+{% endblock %}
+
+{% block description %}
+<p>Refines the corner locations. </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.cornerSubPix(image, corners, winSize, zeroZone, criteria) &rarr; corners</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): Input image array. The image can have only one channel (R, B, G, or grayscale).</li>
+    <li><prmtr>corners</prmtr> (<ptype>np.ndarray</ptype>): Initial coordinates of the input corners and refined coordinates provided for output (e.g. <code>np.array([[0, 5], [2, 6]], dtype=np.float32)</code>). May also come from another function such as <code>findChessboardCorners</code>. </li>
+    <li><prmtr>winSize</prmtr> (<ptype>tuple: (int, int)</ptype>): Half of the side length of the search window. For example, if <code>winSize=(5,5)</code>, then a \((5 \times 2+1) \times (5 \times 2+1)=11\times 11\) search window is used. Must be positive integers.</li>
+    <li><prmtr>zeroZone</prmtr> (<ptype>tuple: (int, int)</ptype>): Half of the size of the dead region in the middle of the search zone over which the summation in the formula below is not done. It is used sometimes to avoid possible singularities of the autocorrelation matrix. The value of <code>(-1,-1)</code> indicates that there is no such size.  </li>
+    <li><prmtr>criteria</prmtr> (<a href="https://docs.opencv.org/master/d9/d5d/classcv_1_1TermCriteria.html"><code>TermCriteria</code></a>): Criteria for termination of the iterative process of corner refinement. That is, the process of corner position refinement stops either after <code>criteria.maxCount</code> iterations or when the corner position moves by less than <code>criteria.epsilon</code> on some iteration. See note below.</li>
+</ul>
+
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function iterates to find the sub-pixel accurate location of corners or radial saddle points, as shown on the figure below. The functions <code>cornerHarris</code> or <code>findContours</code> will return integer values for corners, and <code>cornerSubPix</code> will refine those to more accurate locations (the subpixel location values). Please see this <a href="https://stackoverflow.com/questions/50984205/how-to-find-corners-points-of-a-shape-in-an-image-in-opencv">link</a> for complete examples.<br>
+<img src="../source_docs/cornersubpiximage/cornersubpix.png"></img>
+<br>
+The sub-pixel accurate corner locator is based on the observation that every vector from the center \(q\) to a point \(p\) located within a neighborhood of <i>q</i> is orthogonal to the image gradient at <i>p</i> subject to image and measurement noise. Consider the expression:
+
+$$\epsilon_i=DI_{p_i}^T\ast(q-p_i)$$
+
+where \(DI_{p_i}\) is an image gradient at one of the points \(p_i\) in a neighborhood of <i>q</i>. The value of <i>q</i> is to be found so that \(\epsilon_i\) is minimized. A system of equations may be set up with \(\epsilon_i\) set to zero:
+
+$$\sum_i(DI_{p_i}\ \cdot\ \ DI_{p_i}\ ^T)\cdot\ q\ -\ \sum_i(DI_{p_i}\ \ \cdot\ DI_{p_i}\ \ ^T\cdot\ p_i)$$
+
+where the gradients are summed within a neighborhood ("search window") of <i>q</i> . Calling the first gradient term <i>G</i> and the second gradient term <i>b</i> gives:
+
+$$q=\ G^{-1}\ \ \cdot\ b$$
+
+The algorithm sets the center of the neighborhood window at this new center <i>q</i> and then iterates until the center stays within a set threshold.
+
+</p>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>The parameter <code>criteria</code> of type <code>TermCriteria</code> contains three pieces of important information:
+    <ul>
+        <li><code>criteria.type</code>: The type of termination criteria. One of iterations (<code>cv2.TermCriteria_COUNT</code>), epsilon (<code>cv2.TERM_CRITERIA_EPS</code>), or both (<code>cv2.TERM_CRITERIA_EPS + cv2.TermCriteria_COUNT</code>; will stop when first is met).</li>
+        <li><code>criteria.maxCount</code> (<ptype>int</ptype>): The maximum number of iterations or elements to compute.</li>
+        <li><code>criteria.epsilon</code> (<ptype>float</ptype>): The desired accuracy or change in parameters at which the iterative algorithm stops.</li>
+    </ul>
+    All three of these must be specified to define <code>criteria</code>, even if only using one stopping condition.</li>
+    <li>The parameter <code>corners</code> is both an input and an output.  This means that the returned <code>corners</code> object and the parameter <code>corners</code> will have the same id. In other words, the original input <code>corners</code> object is modified, and an object that references it is returned.</li>
+    <li>This function returns non-integer values for the sub-pixel locations of the corners.  This means that many of the drawing functions will require these values to be rounded to ingteger values, if <code>corners</code> is used as an input.</li>
+</ul>
+
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga354e0d7c86d0d9da75de9b9701a9a87e">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/dd/d92/tutorial_corner_subpixels.html">OpenCV Tutorial: Detecting Corners Locations in Subpixels</a></li>
+    <li><a href="https://stackoverflow.com/questions/50984205/how-to-find-corners-points-of-a-shape-in-an-image-in-opencv">StackOverflow Example</a></li>
+</ul>
+{% endblock %}

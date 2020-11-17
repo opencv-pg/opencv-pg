@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+fillPoly
+{% endblock %}
+
+{% block description %}
+<p>Fills the area bounded by one or more polygons. </p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.fillPoly(img, pts, color[, lineType[, shift[, offset]]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>img</prmtr> (<ptype>np.ndarray</ptype>): Input image. The image can have any number of channels.</li>
+    <li><prmtr>pts</prmtr> (<ptype>np.ndarray</ptype>):  Array of polygons where each polygon is represented as an array of points. When specifying multiple polygons, each one must have the same number of points.</li>
+    <li><prmtr>color</prmtr> (<ptype>float</ptype>): Polygon color. Must be positive.</li>
+    <li><prmtr>lineType</prmtr> (optional; <ptype>int or predefined <a href="https://docs.opencv.org/master/d6/d6e/group__imgproc__draw.html#gaf076ef45de481ac96e0ab3dc2c29a777">lineType</a></ptype>): Type of the polygon boundaries. Default is 8. </li>
+    <li><prmtr>shift</prmtr> (optional; <ptype>int</ptype>): Number of fractional bits in the vertex coordinates. Must be at least 0. Default is 0. </li>
+    <li><prmtr>offset</prmtr> (optional; <ptype>tuple: (int, int)</ptype>): Optional offset of all points of the contours. Default is no offset. </li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function <code>fillPoly</code> fills an area bounded by several polygonal contours. The function can fill complex areas, for example, areas with holes, contours with self-intersections (some of their parts), and so forth.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a  href="https://docs.opencv.org/master/d6/d6e/group__imgproc__draw.html#ga8c69b68fab5f25e2223b6496aa60dad5">OpenCV Documentation</a></li>
+    <li><a  href="https://docs.opencv.org/master/d3/d96/tutorial_basic_geometric_drawing.html">OpenCV Tutorial: Basic Drawing</a></li>
+</ul>
+
+{% endblock %}

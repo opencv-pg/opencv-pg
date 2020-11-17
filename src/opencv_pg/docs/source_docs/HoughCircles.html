@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+HoughCircles
+{% endblock %}
+
+{% block description %}
+<p>Finds circles in a grayscale image using the Hough transform.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.HoughCircles(image, method, dp, minDist[, circles[, param1[, param2[, minRadius[, maxRadius]]]]]) &rarr; circles</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): 8-bit, single-channel, grayscale input image.</li>
+    <li><prmtr>method</prmtr> (<a href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga073687a5b96ac7a3ab5802eb5510fe65"><code>cv2.HOUGH_*</code></a>): Detection method to use. Currently, the only implemented methods are <code>CV_HOUGH_GRADIENT</code>, which is basically 21HT, described in [Yuen90], and <code>CV_HOUGH_GRADIENT_ALT</code>.</li>
+    <li><prmtr>dp</prmtr> (<ptype>float</ptype>): Inverse ratio of the accumulator resolution to the image resolution. For example, if <code>dp=1</code>, the accumulator has the same resolution as the input image. If <code>dp=2</code>, the accumulator has half as big width and height. For <code>CV_HOUGH_GRADIENT_ALT</code> the recommended value is <code>dp=1.5</code>, unless some very small circles need to be detected.</li>
+    <li><prmtr>minDist</prmtr> (<ptype>float</ptype>): Minimum distance between the centers of the detected circles. If the parameter is too small, multiple neighbor circles may be falsely detected in addition to a true one. If it is too large, some circles may be missed.</li>
+    <li><prmtr>circles</prmtr> (optional; <ptype>np.ndarray</ptype>): Output vector of found circles. Each vector is encoded as a 3- or 4-element floating-point vector: <code>(x,y,radius)</code> or <code>(x,y,radius,votes)</code>.</li>
+    <li><prmtr>param1</prmtr> (optional; <ptype>float</ptype>): First method-specific parameter. In case of <code>CV_HOUGH_GRADIENT</code> and <code>CV_HOUGH_GRADIENT_ALT</code>, it is the higher threshold of the two passed to the Canny edge detector (the lower one is twice smaller). Note that <code>CV_HOUGH_GRADIENT_ALT</code> uses Scharr algorithm to compute image derivatives, so the threshold value should normally be higher, such as 300 for normally exposed and contrasty images. Default is 100.</li>
+    <li><prmtr>param2</prmtr> (optional; <ptype>float</ptype>): Second method-specific parameter. In case of <code>CV_HOUGH_GRADIENT</code>, it is the accumulator threshold for the circle centers at the detection stage. The smaller it is, the more false circles may be detected. Circles, corresponding to the larger accumulator values, will be returned first. In the case of <code>CV_HOUGH_GRADIENT_ALT</code> algorithm, this is the circle "perfectness" measure. The closer it is to 1, the better shaped circles the algorithm selects. In most cases 0.9 should be fine. If you want better detection of small circles, you may decrease it to 0.85, 0.8 or even less (but then also try to limit the search range [<code>minRadius</code>, <code>maxRadius</code>] to avoid many false circles). Default is 100.</li>
+    <li><prmtr>minRadius</prmtr> (optional; <ptype>int</ptype>): Minimum circle radius. Default is 0.</li>
+    <li><prmtr>maxRadius</prmtr> (optional; <ptype>int</ptype>): Maximum circle radius. If less than or equal to 0, it uses the maximum image dimension. If strictly less than 0, <code>CV_HOUGH_GRADIENT</code> returns centers without finding the radius. <code>CV_HOUGH_GRADIENT_ALT</code> always computes circle radiuses. Default is 0.</li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>Usually the function detects the centers of circles well. However, it may fail to find the correct radii. You can assist the function by specifying the radius range (<code>minRadius</code> and <code>maxRadius</code>), if you know it. </li>
+    <li>In the case of <code>CV_HOUGH_GRADIENT</code>, you may set <code>maxRadius</code> to a negative number to return centers only without radius search, and find the correct radius using an additional procedure.</li>
+    <li>It also helps to smooth image a bit unless it's already soft. For example, <code>GaussianBlur()</code> with \(7\times 7\) kernel and \( 1.5 \times 1.5\) sigma or similar blurring may help.</li>
+</ul>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/dd/d1a/group__imgproc__feature.html#ga47849c3be0d0406ad3ca45db65a25d2d">OpenCV Documentation</a></li>
+    <li><a href="https://stackoverflow.com/questions/38048265/houghcircles-cant-detect-circles-on-this-image/46500223#46500223">Stack Overflow Explanation</a></li>
+    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/026288569090059E">[Yuen90]</a>: Yuen, H. K. and Princen, J. and Illingworth, J. and Kittler, J., Comparative study of Hough transform methods for circle finding. Image Vision Comput. 8 1, pp 71–77 (1990)</li>
+</ul>
+{% endblock %}

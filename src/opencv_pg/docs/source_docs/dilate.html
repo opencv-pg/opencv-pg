@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+dilate
+{% endblock %}
+
+{% block description %}
+<p>Dilates an image by using a specific structuring element.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.dilate(src, kernel[, dst[, anchor[, iterations[, borderType[, borderValue]]]]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image; the number of channels can be arbitrary, but the depth should be one of <code>cv2.CV_8U</code>, <code>cv2.CV_16U</code>, <code>cv2.CV_16S</code>, <code>cv2.CV_32F</code> or <code>cv2.CV_64F</code>.</li>
+    <li><prmtr>kernel</prmtr> (<ptype>np.ndarray</ptype>): Structuring element used for dilation; if <code>kernel=Mat()</code>, a 3 x 3 rectangular structuring element is used. Kernels can be created using <a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#gac342a1bb6eabf6f55c803b09268e36dc"><code>getStructuringElement</code></a>. These elements can have shape MORPH_RECT (a rectangular structuring element), MORPH_CROSS (a cross-shaped structuring element), or MORPH_ELLIPSE (a filled ellipse inscribed into the rectangle).</code></li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same size and type as <code>src</code>.</li>
+    <li><prmtr>anchor</prmtr> (optional; <ptype>tuple: (int, int)</ptype>): Position of the anchor within the element; default value \((-1, -1)\) means that the anchor is at the kernel center.</li>
+    <li><prmtr>iterations</prmtr> (optional; <ptype>int</ptype>): Number of times dilation is applied. Default value is 1.</li>
+    <li><prmtr>borderType</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_CONSTANT. Choose from:
+        <ul>
+            <li>BORDER_CONSTANT</li>
+            <li>BORDER_REPLICATE</li>
+            <li>BORDER_REFLECT</li>
+            <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+            <li>BORDER_ISOLATED</li>
+        </ul></li>
+    <li><prmtr>borderValue</prmtr> (optional; <ptype>int</ptype>): Border value in case of a constant border. The default value, <code>morphologyDefaultBorderValue</code>, has a special meaning. It is transformed to \(-\infty\) for the dilation, which means that the maximum is effectively computed only over the pixels that are inside the image.</li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<p>
+    <ul>
+        <li>BORDER_WRAP and BORDER_TRANSPARENT are not supported.</li>
+    </ul>
+</p>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function dilates the source image using the specified structuring element that determines the shape of a pixel neighborhood over which the maximum is taken:
+
+$$dst(x,y)=\max_{(x',y'): \text{ kernel}(x',y') \neq 0} src(x+x',y+y')$$
+
+The function supports the in-place mode. Dilation can be applied several (iterations) times. In case of multi-channel images, each channel is processed independently.
+
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#ga4ff0f3318642c4f469d0e11f242f3b6c">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/db/df6/tutorial_erosion_dilatation.html">OpenCV Tutorial: Eroding and Dilating</a></li>
+</ul>
+{% endblock %}

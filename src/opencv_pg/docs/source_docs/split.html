@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+split
+{% endblock %}
+
+{% block description %}
+<p>Divides a multi-channel array into several single-channel arrays.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.split(src[, mv]) → mv</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image. </li>
+    <li><prmtr>mv</prmtr> (optional; <ptype>array of np.ndarrays</ptype>): Output array or vector of arrays</li>
+</ul>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>If you need to extract a single channel or do some other sophisticated channel permutation, use <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga89dd05fd8fe54f5b7b5d89bca21153a1"><code>mixChannels()</code></a>.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    This function splits a multi-channel array into separate single-channel arrays: \(\text{mv}[c](I) = \text{src}(I)_c\). This is most commonly used to split a color image into individual image planes for the B, G, and R channels.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga8027f9deee1e42716be8039e5863fbd9">OpenCV Documentation</a></li>
+</ul>
+
+{% endblock %}

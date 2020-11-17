@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+remap
+{% endblock %}
+
+{% block description %}
+<p>Applies a generic geometrical transformation to an image.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.remap(src, map1, map2, interpolation[, dst[, borderMode[, borderValue]]]) &rarr; dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image.</li>
+    <li><prmtr>map1</prmtr> (<ptype>np.ndarray</ptype>): The first map of either \((x,y)\) points or just \(x\) values having the type <code>cv2.CV_16SC2</code>, <code>cv2.CV_32FC1</code>, or <code>cv2.CV_32FC2</code>. See <a href="https://docs.opencv.org/master/da/d54/group__imgproc__transform.html#ga9156732fa8f01be9ebd1a194f2728b7f"><code>convertMaps</code></a> for details on converting a floating point representation to fixed-point for speed.</li>
+    <li><prmtr>map2</prmtr> (<ptype>np.ndarray</ptype>): The second map of \(y\) values having the type <code>cv2.CV_16UC1</code>, <code>cv2.CV_32FC1</code>, or none (empty map if <code>map1</code> is \((x,y)\) points), respectively.</li>
+    <li><prmtr>interpolation</prmtr> (<a href="https://docs.opencv.org/master/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121"><code>cv2.INTER_*</code></a>): Interpolation method. The method INTER_AREA is not supported by this function.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Destination image. It has the same size as <code>map1</code> and the same type as <code>src</code>.</li>
+    <li><prmtr>borderMode</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga209f2f4869e304c82d07739337eae7c5"><code>cv2.BORDER_*</code></a>): Pixel extrapolation method. Default is BORDER_DEFAULT. Choose from:
+        <ul>
+            <li>BORDER_CONSTANT</li>
+            <li>BORDER_REPLICATE</li>
+            <li>BORDER_REFLECT</li>
+            <li>BORDER_WRAP</li>
+            <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
+            <li>BORDER_TRANSPARENT</li>
+        </ul></li>
+    <li><prmtr>borderValue</prmtr> (optional; <ptype>int</ptype>): Value used in case of a constant border. By default, it is 0.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function remap transforms the source image using the specified map:
+    $$\texttt{dst}(x,y)=\texttt{src}(map_x(x,y),map_y(x,y))$$
+    where values of pixels with non-integer coordinates are computed using one of available interpolation methods. \(map_x\) and \(map_y\) can be encoded as separate floating-point maps in <code>map1</code> and <code>map2</code> respectively, or interleaved floating-point maps of \((x,y)\) in <code>map1</code>, or fixed-point maps created by using <code>convertMaps</code>. 
+</p>
+{% endblock %}
+
+{% block notes %}
+<p>
+    <ul>
+        <li>Note that the mapping function takes as input pixel coordinates from <code>dst</code> and outputs pixel coordinate in <code>src</code>.</li>
+        <li>You might want to convert from floating to fixed-point representations of a map since they can yield much faster (2x) remapping operations. In the converted case, <code>map1</code> contains pairs <code>(cvFloor(x), cvFloor(y))</code> and <code>map2</code> contains indices in a table of interpolation coefficients.</li>
+        <li>When <code>borderMode=BORDER_TRANSPARENT</code>, it means that the pixels in the destination image that corresponds to the "outliers" in the source image are not modified by the function.</li>
+        <li>BORDER_ISOLATED is not supported.</li>
+        <li>This function cannot operate in-place.</li>
+        <li>Due to current implementation limitations the size of an input and output images should be less than \(32767 \times 32767\).</li>
+        <li>For this function it is advised to use the parameter <code>dst</code> to return the result rather than assignment, as users have reported errors otherwise.</li>
+    </ul>
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/da/d54/group__imgproc__transform.html#gab75ef31ce5cdfb5c44b6da5f3b908ea4">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/d1/da0/tutorial_remap.html">OpenCV Tutorial: Remapping</a></li>
+</ul>
+{% endblock %}

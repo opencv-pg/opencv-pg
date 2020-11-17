@@ -1,0 +1,12 @@
+*.pyc
+__pycache__
+settings.json
+.DS_Store
+.eggs
+*.egg-info/
+venv
+**/js/*
+*.un~
+*.swp
+**/rendered_docs/*.html
+docs/build/

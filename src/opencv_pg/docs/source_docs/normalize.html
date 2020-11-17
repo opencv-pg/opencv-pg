@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+normalize
+{% endblock %}
+
+{% block description %}
+<p>Normalizes the norm or value range of an array.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.normalize(src[, dst[, alpha[, beta[, norm_type[, dtype[, mask]]]]]]) → dst</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>src</prmtr> (<ptype>np.ndarray</ptype>): Input image.</li>
+    <li><prmtr>dst</prmtr> (optional; <ptype>np.ndarray</ptype>): Output image of the same type and size as <code>src</code>.</li>
+    <li><prmtr>alpha</prmtr> (optional; <ptype>float</ptype>): This parameter depends on which <code>norm_type</code> is used. Defaults to 1.
+        <ul>
+        <li>When using <code>norm_type</code> NORM_INF, NORM_L1, or NORM_L2, this function normalizes the image so that \(\|\text{dst}\|_{L_p} = \text{alpha}\), where \(p\) = \(\infty\), 1, or 2, respectively. Defaults to 1.</li>
+        <li>When using <code>norm_type</code> NORM_MINMAX, alpha = \(\min_I\) dst(I).</li>
+    </ul>
+    </li>
+    <li><prmtr>beta</prmtr> (optional; <ptype>float</ptype>): When using <code>norm_type</code> NORM_MINMAX, beta = \(\max_I\) dst(I). Defaults to 0.</li>
+    <li><prmtr>norm_type</prmtr> (optional; <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#gad12cefbcb5291cf958a85b4b67b6149f"><code>cv2.NORM_*</code></a>): Normalization type. Defaults to NORM_L2. Choose from:
+        <ul>
+            <li>NORM_MINMAX: \(\min \text{dst}_i = \text{alpha}\) and \(\max \text{dst}_i = \text{beta}\)</li>
+            <li>NORM_INF: \(\max \text{dst}_i = \text{alpha}\)</li>
+            <li>NORM_L1: \(\sum \text{dst}_i = \text{alpha}\)</li>
+            <li>NORM_L2: \(\sqrt{ \sum \text{dst}_i^2} = \text{alpha}\)</li>
+        </ul> 
+    </li>
+    <li><prmtr>dtype</prmtr> (optional; <a href="https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#filter_depths"><code>cv2.CV_*</code></a>): Output image depth. Default is -1 to use <code>src1.depth()</code>, and this is used in this app.</li>
+    <li><prmtr>mask</prmtr> (optional; <ptype>np.ndarray</ptype>): Optional operation mask that specifies a subarray to be normalized.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>The functions normalize scale and shift the input array elements so that \(\|\text{dst}\|_{L_p} = \text{alpha}\), where \(p\) = \(\infty\), 1, or 2, when using <code>norm_type</code> NORM_INF, NORM_L1, or NORM_L2.  This is referred to as normalizing the norm.</p>
+<p>
+When using <code>norm_type</code> NORM_MINMAX, this function works to satisfy both alpha = \(\min_I\) dst(I) and beta = \(\max_I\) dst(I). This is referred to as normalizing the range.
+</p>
+<p>
+    To modify an entire image using the norm of only a subarray, use the functions <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga55a581f0accd8d990af775d378e7e46c"><code>norm()</code></a> and <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga3460e9c9f37b563ab9dd550c4d8c4e7d"><code>convertScaleAbs()</code></a>.
+</p>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#ga87eef7ee3970f86906d69a92cbf064bd">OpenCV Documentation</a></li>
+</ul>
+
+{% endblock %}

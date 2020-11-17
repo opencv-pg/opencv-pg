@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+matchTemplate
+{% endblock %}
+
+{% block description %}
+<p>Compares a template against overlapped image regions.</p>
+{% endblock %}
+
+{% block signature %}
+<pre>cv2.matchTemplate(image, templ, method[, result[, mask]]) &rarr; result</pre>
+{% endblock %}
+
+{% block parameters %}
+<ul>
+    <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): Image where the search is running. It must be 8-bit or 32-bit floating-point.</li>
+    <li><prmtr>templ</prmtr> (<ptype>np.ndarray</ptype>): Searched template. It must not be larger than the source image and have the same data type.</li>
+    <li><prmtr>method</prmtr> (<a href="https://docs.opencv.org/master/df/dfb/group__imgproc__object.html#ga3a7850640f1fe1f58fe91a2d7583695d"><code>cv2.TM_*</code></a>): Parameter specifying the comparison method. Options are:
+    <ul>
+        <li>TM_SQDIFF</li>
+        <li>TM_SQDIFF_NORMED</li>
+        <li>TM_CCORR</li>
+        <li>TM_CCORR_NORMED</li>
+        <li>TM_CCOEFF</li>
+        <li>TM_CCOEFF_NORMED</li>
+    </ul></li>
+    <li><prmtr>result</prmtr> (optional; <ptype>np.ndarray</ptype>): Map of comparison results. It must be single-channel 32-bit floating-point. If <code>image</code> is \(W \times H\) and <code>templ</code> is \(w \times h\), then <code>result</code> is \((W−w+1) \times (H−h+1)\). This is a grayscale image, where each pixel denotes how much does the neighbourhood of that pixel match with template.</li>
+    <li><prmtr>mask</prmtr> (optional; <ptype>np.ndarray</ptype>): Optional mask. It must have the same size as <code>templ</code>. It must either have the same number of channels as template or only one channel, which is then used for all template and image channels. If the data type is <code>cv2.CV_8U</code>, the mask is interpreted as a binary mask, meaning only elements where mask is nonzero are used and are kept unchanged independent of the actual mask value (weight equals 1). For data tpye <code>cv2.CV_32F</code>, the mask values are used as weights. The exact formulas are documented in <a href="https://docs.opencv.org/master/df/dfb/group__imgproc__object.html#ga3a7850640f1fe1f58fe91a2d7583695d">TemplateMatchModes</a>.</li>
+</ul>
+{% endblock %}
+
+{% block explanation %}
+<p>
+    The function slides through image, compares the overlapped patches of size \(w \times h\) against <code>templ</code> using the specified method and stores the comparison results in <code>result</code>. <a href="https://docs.opencv.org/master/df/dfb/group__imgproc__object.html#ga3a7850640f1fe1f58fe91a2d7583695d">TemplateMatchModes</a> describes the formulae for the available comparison methods (\(I\) denotes image, \(T\) template, \(R\) result, \(M\) the optional mask). The summation is done over template and/or the image patch: \(x'=0...w−1,y'=0...h−1\).
+</p>
+<p>
+    After the function finishes the comparison, the best matches can be found as global minimums (when TM_SQDIFF was used) or maximums (when TM_CCORR or TM_CCOEFF was used) using the <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#gab473bf2eb6d14ff97e89b355dac20707">minMaxLoc</a> function. In case of a color image, template summation in the numerator and each sum in the denominator is done over all of the channels and separate mean values are used for each channel. That is, the function can take a color template and a color image. The result will still be a single-channel image, which is easier to analyze.
+</p>
+{% endblock %}
+
+{% block notes %}
+<ul>
+    <li>This function simply slides the template image over the input image (as in 2D convolution) and compares the template and patch of input image under the template image.</li>
+    <li>If looking for a single instance of the template, the best option is to use <a href="https://docs.opencv.org/master/d2/de8/group__core__array.html#gab473bf2eb6d14ff97e89b355dac20707">minMaxLoc</a>. If looking for multiple instances of the template, the best option is to use thresholding.</li>
+</ul>
+{% endblock %}
+
+{% block references %}
+<ul>
+    <li><a href="https://docs.opencv.org/master/df/dfb/group__imgproc__object.html#ga586ebfb0a7fb604b35a23d85391329be">OpenCV Documentation</a></li>
+    <li><a href="https://docs.opencv.org/master/d4/dc6/tutorial_py_template_matching.html">OpenCV Tutorial: Template Matching</a></li>
+</ul>
+{% endblock %}
