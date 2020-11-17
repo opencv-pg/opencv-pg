@@ -15,8 +15,21 @@ findContours
 {% block parameters %}
 <ul>
     <li><prmtr>image</prmtr> (<ptype>np.ndarray</ptype>): Source, an 8-bit single-channel image. Non-zero pixels are treated as 1's. Zero pixels remain 0's, so the image is treated as binary. </li>
-    <li><prmtr>mode</prmtr> (<a href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga819779b9857cc2f8601e6526a3a5bc71"><code>cv2.RETR_*</code></a>): Contour retrieval mode.</li>
-    <li><prmtr>method</prmtr> (<a href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga4303f45752694956374734a03c54d5ff"><code>cv2.CHAIN_APPROX_*</code></a>): Contour approximation method.</li>
+    <li><prmtr>mode</prmtr> (<a href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga819779b9857cc2f8601e6526a3a5bc71"><code>cv2.RETR_*</code></a>): Contour retrieval mode.  Choose from:
+        <ul>
+            <li>RETR_EXTERNAL: Retrieves only the extreme outer contours. It sets <code>hierarchy[i][2]=hierarchy[i][3]=-1</code> for all the contours.</li>
+            <li>RETR_LIST: Retrieves all of the contours without establishing any hierarchical relationships.</li>
+            <li>RETR_CCOMP: Retrieves all of the contours and organizes them into a two-level hierarchy. At the top level, there are external boundaries of the components. At the second level, there are boundaries of the holes. If there is another contour inside a hole of a connected component, it is still put at the top level.</li>
+            <li>RETR_TREE: Retrieves all of the contours and reconstructs a full hierarchy of nested contours.</li>
+            <li>RETR_FLOODFILL: Connects a pixel to its neighbors if the neighbors are within some threshold difference of the pixel. See <a href="https://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#gaf1f55a048f8a45bc3383586e80b1f0d0">floodFill docs</a> for more information.</li>
+        </ul></li>
+    <li><prmtr>method</prmtr> (<a href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga4303f45752694956374734a03c54d5ff"><code>cv2.CHAIN_APPROX_*</code></a>): Contour approximation method. Choose from:
+        <ul>
+            <li>CHAIN_APPROX_NONE: Stores absolutely all the contour points. That is, any two subsequent points \((x1,y1)\) and \((x2,y2)\) of the contour will be either horizontal, vertical or diagonal neighbors, that is, <code>max(abs(x1-x2),abs(y2-y1))==1</code>.</li>
+            <li>CHAIN_APPROX_SIMPLE: Compresses horizontal, vertical, and diagonal segments and leaves only their end points. For example, an upright rectangular contour is encoded with 4 points.</li>
+            <li>CHAIN_APPROX_TC89_L1: Applies one of the flavors of the <a href="https://ieeexplore.ieee.org/abstract/document/31447">Teh-Chin chain approximation algorithm</a>.</li>
+            <li>CHAIN_APPROX_TC89_KCOS: Applies one of the flavors of the <a href="https://ieeexplore.ieee.org/abstract/document/31447">Teh-Chin chain approximation algorithm</a>.</li>
+        </ul></li>
     <li><prmtr>contours</prmtr> (optional; <ptype>array of np.ndarrays</ptype>): Detected contours. Each contour is stored as an array of points.</li>
     <li><prmtr>hierarchy</prmtr> (optional; <ptype>np.ndarray</ptype>): Optional output varray, containing information about the image topology. It has as many elements as the number of contours. For each i-th contour <code>contours[i]</code>, the elements <code>hierarchy[i][0]</code>, <code>hierarchy[i][1]</code>, <code>hierarchy[i][2]</code>, and <code>hierarchy[i][3]</code> are set to 0-based indices in contours of the next and previous contours at the same hierarchical level, the first child contour and the parent contour, respectively. If for the contour i there are no next, previous, parent, or nested contours, the corresponding elements of <code>hierarchy[i]</code> will be negative.</li>
     <li><prmtr>offset</prmtr> (optional; <code>cv2.POINT</code>): Optional offset by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</li>
