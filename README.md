@@ -6,7 +6,8 @@ It also comes with a custom `Pipeline Launcher` that allows you to build and int
 Full documentation can be found on [Read the Docs](https://opencv-pg.readthedocs.io/en/latest/).
 
 ## Demo
-![Demo of application](https://media.giphy.com/media/08RQD736vk7mGzudyY/giphy.gif)
+<a href="https://drive.google.com/uc?export=view&id=1AKIvHywwR90qyDmypAX7abJX0s5eyVy7"><img src="https://media.giphy.com/media/08RQD736vk7mGzudyY/giphy.gif" style="width: 500px; height: auto;" /></a>
+
 
 ## Installation
 Currently tested with python 3.7.4 and opencv-headless-4.4.0.46
