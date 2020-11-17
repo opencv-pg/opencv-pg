@@ -3,8 +3,10 @@ The OpenCV Playground is a Qt5 application that brings together improved documen
 
 It also comes with a custom `Pipeline Launcher` that allows you to build and interact with your own sequence of image transformations.
 
-**TODO: Update Read The Docs link - not yet active**
-Full documentation can be found on [Read the Docs](https://opencvpg.readthedocs.io/en/latest/).
+Full documentation can be found on [Read the Docs](https://opencv-pg.readthedocs.io/en/latest/).
+
+## Demo
+![Demo of application](https://drive.google.com/uc?export=view&id=1AKIvHywwR90qyDmypAX7abJX0s5eyVy7)
 
 ## Installation
 Currently tested with python 3.7.4 and opencv-headless-4.4.0.46
