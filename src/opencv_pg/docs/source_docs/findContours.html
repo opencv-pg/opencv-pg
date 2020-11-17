@@ -25,7 +25,7 @@ findContours
         </ul></li>
     <li><prmtr>method</prmtr> (<a href="https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga4303f45752694956374734a03c54d5ff"><code>cv2.CHAIN_APPROX_*</code></a>): Contour approximation method. Choose from:
         <ul>
-            <li>CHAIN_APPROX_NONE: Stores absolutely all the contour points. That is, any two subsequent points \((x1,y1)\) and \((x2,y2)\) of the contour will be either horizontal, vertical or diagonal neighbors, that is, <code>max(abs(x1-x2),abs(y2-y1))==1</code>.</li>
+            <li>CHAIN_APPROX_NONE: Stores absolutely all the contour points. That is, any two subsequent points \((x_1,y_1)\) and \((x_2,y_2)\) of the contour will be either horizontal, vertical or diagonal neighbors, that is, <code>max(abs(x1-x2),abs(y2-y1))==1</code>.</li>
             <li>CHAIN_APPROX_SIMPLE: Compresses horizontal, vertical, and diagonal segments and leaves only their end points. For example, an upright rectangular contour is encoded with 4 points.</li>
             <li>CHAIN_APPROX_TC89_L1: Applies one of the flavors of the <a href="https://ieeexplore.ieee.org/abstract/document/31447">Teh-Chin chain approximation algorithm</a>.</li>
             <li>CHAIN_APPROX_TC89_KCOS: Applies one of the flavors of the <a href="https://ieeexplore.ieee.org/abstract/document/31447">Teh-Chin chain approximation algorithm</a>.</li>
