@@ -27,6 +27,20 @@ def _check_error(window):
         assert tf.error is None
 
 
+def _test_single_attr(transform, attr, value):
+    """Tests setting single attribute and running pipeline"""
+    # Given
+    window = get_transform_window(transform, IMG_PATH)
+    tf = window.transforms[1]
+    setattr(tf, attr, value)
+
+    # When
+    window.draw(None, None)
+
+    # Then
+    _check_error(window)
+
+
 class TestGaussianBlur():
     @pytest.mark.parametrize(
         'border_type',
@@ -74,16 +88,12 @@ class TestCopyMakeBorder():
         list(transforms.CopyMakeBorder.border_type.options)
     )
     def test_border_types(self, border_type):
-        # Given
-        window = get_transform_window(transforms.CopyMakeBorder, IMG_PATH)
-        tf = window.transforms[1]
-        tf.border_type = cvc.BORDERS[border_type]
-
-        # When
-        window.draw(None, None)
-
-        # Then
-        _check_error(window)
+        """Test border types"""
+        _test_single_attr(
+            transforms.CopyMakeBorder,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
 
     @pytest.mark.parametrize('value', (0, 15))
     def test_min_and_middle_val(self, value):
@@ -200,16 +210,12 @@ class TestFilter2D():
         list(transforms.Filter2D.border_type.options)
     )
     def test_border_types(self, border_type):
-        # Given
-        window = get_transform_window(transforms.Filter2D, IMG_PATH)
-        tf = window.transforms[1]
-        tf.border_type = cvc.BORDERS[border_type]
-
-        # When
-        window.draw(None, None)
-
-        # Then
-        _check_error(window)
+        """Test border types"""
+        _test_single_attr(
+            transforms.Filter2D,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
 
     @pytest.mark.parametrize('value', (0, 100, 300))
     def test_delta_values(self, value):
@@ -473,16 +479,11 @@ class TestBilateralFilter():
         list(transforms.BilateralFilter.border_type.options))
     def test_border_types(self, border_type):
         """Test the different border options"""
-        # Given
-        window = get_transform_window(transforms.BilateralFilter, IMG_PATH)
-        tf = window.transforms[1]
-        tf.border_type = cvc.BORDERS[border_type]
-
-        # When
-        window.draw(None, None)
-
-        # Then
-        _check_error(window)
+        _test_single_attr(
+            transforms.BilateralFilter,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
 
     # NOTE: Not testing 0 diam b/c it's an auto and takes forever
     @pytest.mark.parametrize('diameter, sigma_c, sigma_s', (
@@ -560,16 +561,11 @@ class TestRemap():
     )
     def test_border_types(self, border_type):
         """Test the different border options"""
-        # Given
-        window = get_transform_window(transforms.Remap, IMG_PATH)
-        tf = window.transforms[1]
-        tf.border_type = cvc.BORDERS[border_type]
-
-        # When
-        window.draw(None, None)
-
-        # Then
-        _check_error(window)
+        _test_single_attr(
+            transforms.Remap,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
 
     @pytest.mark.parametrize(
         'interp_type',
@@ -577,16 +573,11 @@ class TestRemap():
     )
     def test_interpolation_types(self, interp_type):
         """Test the different interpolation options"""
-        # Given
-        window = get_transform_window(transforms.Remap, IMG_PATH)
-        tf = window.transforms[1]
-        tf.interpolation_type = cvc.INTERPOLATION[interp_type]
-
-        # When
-        window.draw(None, None)
-
-        # Then
-        _check_error(window)
+        _test_single_attr(
+            transforms.Remap,
+            'interpolation_type',
+            cvc.INTERPOLATION[interp_type]
+        )
 
     @pytest.mark.parametrize('r, theta', (
         (1, 1),
@@ -605,3 +596,23 @@ class TestRemap():
 
         # Then
         _check_error(window)
+
+
+# class TestSepFilter2D():
+
+#     @pytest.mark.parametrize(
+#         'border_type',
+#         list(transforms.Remap.border_type.options)
+#     )
+#     def test_border_types(self, border_type):
+#         """Test the different border options"""
+#         # Given
+#         window = get_transform_window(transforms.Remap, IMG_PATH)
+#         tf = window.transforms[1]
+#         tf.border_type = cvc.BORDERS[border_type]
+
+#         # When
+#         window.draw(None, None)
+
+#         # Then
+#         _check_error(window)
