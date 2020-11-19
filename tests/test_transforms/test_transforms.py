@@ -598,21 +598,40 @@ class TestRemap():
         _check_error(window)
 
 
-# class TestSepFilter2D():
+@mock.patch('opencv_pg.models.transforms.SepFilter2D.update_widgets_state', lambda x: None)
+class TestSepFilter2D():
 
-#     @pytest.mark.parametrize(
-#         'border_type',
-#         list(transforms.Remap.border_type.options)
-#     )
-#     def test_border_types(self, border_type):
-#         """Test the different border options"""
-#         # Given
-#         window = get_transform_window(transforms.Remap, IMG_PATH)
-#         tf = window.transforms[1]
-#         tf.border_type = cvc.BORDERS[border_type]
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.SepFilter2D.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test the different border options"""
+        _test_single_attr(
+            transforms.SepFilter2D,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
 
-#         # When
-#         window.draw(None, None)
+    @pytest.mark.skip(reason="Broken")
+    @pytest.mark.parametrize('kernel_x, kernel_y, delta', (
+        (np.ones((1, 1)), np.ones((1, 5)), 0),
+        (np.ones((1, 5)), np.ones((1, 1)), 0),
+        (np.ones((1, 1)), np.ones((1, 1)), 0),
+        (np.ones((1, 3)), np.ones((1, 3)), -255),
+        (np.ones((1, 3)), np.ones((1, 3)), 255),
+    ))
+    def test_other_params(self, kernel_x, kernel_y, delta):
+        """Test other param combinations"""
+        # Given
+        window = get_transform_window(transforms.Remap, IMG_PATH)
+        tf = window.transforms[1]
+        tf.kernel_X = kernel_x
+        tf.kernel_Y = kernel_y
+        tf.delta = delta
 
-#         # Then
-#         _check_error(window)
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
