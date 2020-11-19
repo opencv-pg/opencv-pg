@@ -510,3 +510,48 @@ class TestBilateralFilter():
 
         # Then
         _check_error(window)
+
+
+class TestSobel():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.Sobel.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test the different border options"""
+        # Given
+        window = get_transform_window(transforms.Sobel, IMG_PATH)
+        tf = window.transforms[1]
+        tf.border_type = cvc.BORDERS[border_type]
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+    @pytest.mark.parametrize('dx, dy, k_size, scale, delta', (
+        (1, 1, 1, .1, -255),
+        (1, 1, 1, .1, 255),
+        (2, 2, 3, 200, 255),
+        (2, 2, 5, 100, 0),
+        (2, 2, 7, 100, 0),
+        (1, 1, 7, .1, 0),
+    ))
+    def test_other_params(self, dx, dy, k_size, scale, delta):
+        """Test the different border options"""
+        # Given
+        window = get_transform_window(transforms.Sobel, IMG_PATH)
+        tf = window.transforms[1]
+        tf.dx = dx
+        tf.dy = dy
+        tf.k_size = k_size
+        tf.scale = scale
+        tf.delta = delta
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)

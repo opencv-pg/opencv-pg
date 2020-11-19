@@ -458,7 +458,7 @@ class Sobel(BaseTransform):
     dy = params.IntSlider(min_val=1, max_val=2, default=1, step=1)
     k_size = params.IntSlider(min_val=1, max_val=7, default=3, step=2)
     scale = params.FloatSlider(min_val=0.10, max_val=200, default=100.0, step=0.1)
-    delta = params.IntSlider(min_val=-255, max_val=255, default=0, label="Delta")
+    delta = params.IntSlider(min_val=-255, max_val=255, default=0)
     border_type = params.ComboBox(
         options=[
             "BORDER_CONSTANT",
