@@ -540,7 +540,7 @@ class TestSobel():
         (1, 1, 7, .1, 0),
     ))
     def test_other_params(self, dx, dy, k_size, scale, delta):
-        """Test the different border options"""
+        """Test other param combinations"""
         # Given
         window = get_transform_window(transforms.Sobel, IMG_PATH)
         tf = window.transforms[1]
@@ -549,6 +549,64 @@ class TestSobel():
         tf.k_size = k_size
         tf.scale = scale
         tf.delta = delta
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+@mock.patch('opencv_pg.models.transforms.Remap.update_widgets_state', lambda x: None)
+class TestRemap():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.Remap.border_type.options)
+    )
+    # @mock.patch('opencv_pg.models.transforms.Remap.update_widgets_state')
+    def test_border_types(self, border_type):
+        """Test the different border options"""
+        # Given
+        window = get_transform_window(transforms.Remap, IMG_PATH)
+        tf = window.transforms[1]
+        tf.border_type = cvc.BORDERS[border_type]
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+    @pytest.mark.parametrize(
+        'interp_type',
+        list(transforms.Remap.interpolation_type.options)
+    )
+    # @mock.patch('opencv_pg.models.transforms.Remap.update_widgets_state')
+    def test_interpolation_types(self, interp_type):
+        """Test the different interpolation options"""
+        # Given
+        window = get_transform_window(transforms.Remap, IMG_PATH)
+        tf = window.transforms[1]
+        tf.interpolation_type = cvc.INTERPOLATION[interp_type]
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+    @pytest.mark.parametrize('r, theta', (
+        (1, 1),
+        (30, 20),
+    ))
+    def test_other_params(self, r, theta):
+        """Test other param combinations"""
+        # Given
+        window = get_transform_window(transforms.Remap, IMG_PATH)
+        tf = window.transforms[1]
+        tf.r = r
+        tf.theta = theta
 
         # When
         window.draw(None, None)
