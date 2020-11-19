@@ -67,13 +67,13 @@ class TestMedianBlur():
         assert tf.error is None
 
 
+@mock.patch('opencv_pg.models.transforms.CopyMakeBorder.update_widgets_state', lambda x: None)
 class TestCopyMakeBorder():
     @pytest.mark.parametrize(
         'border_type',
         list(transforms.CopyMakeBorder.border_type.options)
     )
-    @mock.patch('opencv_pg.models.transforms.CopyMakeBorder.update_widgets_state')
-    def test_border_types(self, _, border_type):
+    def test_border_types(self, border_type):
         # Given
         window = get_transform_window(transforms.CopyMakeBorder, IMG_PATH)
         tf = window.transforms[1]
@@ -86,8 +86,7 @@ class TestCopyMakeBorder():
         _check_error(window)
 
     @pytest.mark.parametrize('value', (0, 15))
-    @mock.patch('opencv_pg.models.transforms.CopyMakeBorder.update_widgets_state')
-    def test_min_and_middle_val(self, _, value):
+    def test_min_and_middle_val(self, value):
         # Given
         window = get_transform_window(transforms.CopyMakeBorder, IMG_PATH)
         tf = window.transforms[1]
@@ -103,6 +102,7 @@ class TestCopyMakeBorder():
         _check_error(window)
 
 
+@mock.patch('opencv_pg.models.transforms.Normalize.update_widgets_state', lambda x: None)
 class TestNormalize():
     @pytest.mark.parametrize('alpha, beta', (
         (0, 0),
@@ -111,8 +111,7 @@ class TestNormalize():
         (255, 0),
         (255, 255),
     ))
-    @mock.patch('opencv_pg.models.transforms.Normalize.update_widgets_state')
-    def test_minmax(self, _, alpha, beta):
+    def test_minmax(self, alpha, beta):
         # Given
         window = get_transform_window(transforms.Normalize, IMG_PATH)
         tf = window.transforms[1]
@@ -127,8 +126,7 @@ class TestNormalize():
         _check_error(window)
 
     @pytest.mark.parametrize('alpha', (0, 125, 255))
-    @mock.patch('opencv_pg.models.transforms.Normalize.update_widgets_state')
-    def test_norm_inf(self, _, alpha):
+    def test_norm_inf(self, alpha):
         # Given
         window = get_transform_window(transforms.Normalize, IMG_PATH)
         tf = window.transforms[1]
@@ -142,8 +140,7 @@ class TestNormalize():
         _check_error(window)
 
     @pytest.mark.parametrize('alpha', (0, 275400000 // 2, 275400000))
-    @mock.patch('opencv_pg.models.transforms.Normalize.update_widgets_state')
-    def test_l1(self, _, alpha):
+    def test_l1(self, alpha):
         # Given
         window = get_transform_window(transforms.Normalize, IMG_PATH)
         tf = window.transforms[1]
@@ -157,8 +154,7 @@ class TestNormalize():
         _check_error(window)
 
     @pytest.mark.parametrize('alpha', (0, 7735580382 // 2, 7735580382))
-    @mock.patch('opencv_pg.models.transforms.Normalize.update_widgets_state')
-    def test_l2(self, _, alpha):
+    def test_l2(self, alpha):
         # Given
         window = get_transform_window(transforms.Normalize, IMG_PATH)
         tf = window.transforms[1]
@@ -389,9 +385,9 @@ class TestHoughLinesP():
         _check_error(window)
 
 
+@mock.patch('opencv_pg.models.transforms.HoughCircles.update_widgets_state', lambda x: None)
 class TestHoughCircles():
-    @mock.patch('opencv_pg.models.transforms.HoughCircles.update_widgets_state')
-    def test_defaults(self, _):
+    def test_defaults(self):
         """Test using the defaults for all transforms"""
         # Given
         window = get_transform_window(transforms.HoughCircles, IMG_PATH)
@@ -402,8 +398,7 @@ class TestHoughCircles():
         # Then
         _check_error(window)
 
-    @mock.patch('opencv_pg.models.transforms.HoughCircles.update_widgets_state')
-    def test_reasonable_values(self, _):
+    def test_reasonable_values(self):
         """Test using some reasonable values to reduce lines found"""
         # Given
         window = get_transform_window(transforms.HoughCircles, IMG_PATH)
@@ -427,12 +422,12 @@ class TestHoughCircles():
         _check_error(window)
 
 
+@mock.patch('opencv_pg.models.transforms.Dilate.update_widgets_state', lambda x: None)
 class TestDilate():
     @pytest.mark.parametrize(
         'border_type',
         list(transforms.Dilate.border_type.options))
-    @mock.patch('opencv_pg.models.transforms.Dilate.update_widgets_state')
-    def test_border_types(self, _, border_type):
+    def test_border_types(self, border_type):
         """Test the different border options"""
         # Given
         window = get_transform_window(transforms.Dilate, IMG_PATH)
@@ -456,8 +451,7 @@ class TestDilate():
         (cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3)), (2, 2), 1),
         (cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3)), (2, 2), 5),
     ))
-    @mock.patch('opencv_pg.models.transforms.Dilate.update_widgets_state')
-    def test_other_params(self, _, kernel, anchor, iterations):
+    def test_other_params(self, kernel, anchor, iterations):
         """Test combinations of the other params"""
         # Given
         window = get_transform_window(transforms.Dilate, IMG_PATH)
@@ -564,7 +558,6 @@ class TestRemap():
         'border_type',
         list(transforms.Remap.border_type.options)
     )
-    # @mock.patch('opencv_pg.models.transforms.Remap.update_widgets_state')
     def test_border_types(self, border_type):
         """Test the different border options"""
         # Given
@@ -582,7 +575,6 @@ class TestRemap():
         'interp_type',
         list(transforms.Remap.interpolation_type.options)
     )
-    # @mock.patch('opencv_pg.models.transforms.Remap.update_widgets_state')
     def test_interpolation_types(self, interp_type):
         """Test the different interpolation options"""
         # Given
