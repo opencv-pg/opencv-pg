@@ -820,3 +820,43 @@ class TestInRangeRaw():
 
         # Then
         _check_error(window)
+
+
+class TestCornerHarris():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.CornerHarris.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test border types"""
+        _test_single_attr(
+            transforms.CornerHarris,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
+
+    @pytest.mark.parametrize('block_size, k_size, k', (
+        (1, 3, .1),
+        (2, 1, .005),
+        (50, 5, .5),
+        (100, 7, 1),
+    ))
+    def test_other_params(self, block_size, k_size, k):
+        """Test other param combinations"""
+        # Given
+        window = get_transform_window(transforms.CornerHarris, IMG_PATH)
+        canny = window.transforms[2]
+        canny.threshold1 = 74
+        canny.threshold2 = 74
+
+        tf = window.transforms[3]
+        tf.block_size = block_size
+        tf.k_size = k_size
+        tf.k = k
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
