@@ -27,11 +27,11 @@ def _check_error(window):
         assert tf.error is None
 
 
-def _test_single_attr(transform, attr, value):
+def _test_single_attr(transform, attr, value, tf_num=1):
     """Tests setting single attribute and running pipeline"""
     # Given
     window = get_transform_window(transform, IMG_PATH)
-    tf = window.transforms[1]
+    tf = window.transforms[tf_num]
     setattr(tf, attr, value)
 
     # When
@@ -698,6 +698,60 @@ class TestFastNIMeansDenoisingColored():
         tf.search_window_size = search_win_size
         tf.h = h
         tf.h_color = h_color
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+@mock.patch('opencv_pg.models.transforms.Kmeans.update_widgets_state', lambda x: None)
+class TestKMeans():
+    @pytest.mark.parametrize(
+        'criteria',
+        list(transforms.Kmeans.criteria.options)
+    )
+    def test_criteria(self, criteria):
+        """Test Criteria options"""
+        _test_single_attr(
+            transforms.Kmeans,
+            'criteria',
+            cvc.TERM[criteria]
+        )
+
+    @pytest.mark.parametrize(
+        'flag',
+        list(transforms.Kmeans.flags.options)
+    )
+    def test_flags(self, flag):
+        """Test Flags options"""
+        _test_single_attr(
+            transforms.Kmeans,
+            'flags',
+            cvc.KFLAGS[flag]
+        )
+
+    @pytest.mark.parametrize('criteria, k, epsilon, max_iter, attempts', (
+        ('TERM_CRITERIA_EPS', 1, .001, 10, 1),
+        ('TERM_CRITERIA_EPS', 5, .001, 10, 1),
+        ('TERM_CRITERIA_EPS', 5, .2, 10, 1),
+        ('TERM_CRITERIA_MAX_ITER', 1, .01, 1, 1),
+        ('TERM_CRITERIA_MAX_ITER', 5, .01, 200, 1),
+        ('TERM_CRITERIA_MAX_ITER', 5, .01, 200, 5),
+        ('EPS + MAX_ITER (Either)', 5, .001, 200, 5),
+
+    ))
+    def test_other_params(self, criteria, k, epsilon, max_iter, attempts):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.Kmeans, IMG_PATH)
+        tf = window.transforms[1]
+        tf.criteria = cvc.TERM[criteria]
+        tf.k = k
+        tf.epsilon = epsilon
+        tf.max_iter = max_iter
+        tf.attempts = attempts
 
         # When
         window.draw(None, None)
