@@ -893,3 +893,32 @@ class TestCornerSubPix():
 
         # Then
         _check_error(window)
+
+
+@mock.patch('opencv_pg.models.transforms.GoodFeaturesToTrack.update_widgets_state', lambda x: None)
+class TestGoodFeaturesToTrack():
+
+    @pytest.mark.parametrize('max_corners, quality, min_dist, block_size, harris, k', (
+        (0, 0.001, 0, 1, False, 0.005),
+        (0, .1, 0, 1, False, 0.005),
+        (100, 1, 100, 7, False, 0.005),
+        (0, .1, 0, 3, True, 0.005),
+        (0, .1, 1, 5, True, 0.005),
+    ))
+    def test_other_params(self, max_corners, quality, min_dist, block_size, harris, k):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.GoodFeaturesToTrack, IMG_PATH)
+        tf = window.transforms[1]
+        tf.max_corners = max_corners
+        tf.quality_level = quality
+        tf.min_distance = min_dist
+        tf.block_size = block_size
+        tf.use_harris_detector = harris
+        tf.k = k
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
