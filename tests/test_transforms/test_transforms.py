@@ -635,3 +635,43 @@ class TestSepFilter2D():
 
         # Then
         _check_error(window)
+
+
+@mock.patch('opencv_pg.models.transforms.BoxFilter.interconnect_widgets', lambda x: None)
+class TestBoxFilter():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.BoxFilter.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test the different border options"""
+        _test_single_attr(
+            transforms.SepFilter2D,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
+
+    @pytest.mark.parametrize('kernel, normalize', (
+        (np.ones((1, 1)), False),
+        (np.ones((1, 1)), True),
+        (np.ones((3, 3)), False),
+        (np.ones((3, 3)), True),
+        (np.ones((1, 3)), True),
+        (np.ones((3, 1)), True),
+        (np.ones((1, 3)), False),
+        (np.ones((3, 1)), False),
+    ))
+    def test_other_params(self, kernel, normalize):
+        """Test other param combinations"""
+        # Given
+        window = get_transform_window(transforms.BoxFilter, IMG_PATH)
+        tf = window.transforms[1]
+        tf.kernel = kernel
+        tf.normalize = normalize
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
