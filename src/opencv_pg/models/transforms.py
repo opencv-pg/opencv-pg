@@ -458,7 +458,7 @@ class Sobel(BaseTransform):
     dy = params.IntSlider(min_val=1, max_val=2, default=1, step=1)
     k_size = params.IntSlider(min_val=1, max_val=7, default=3, step=2)
     scale = params.FloatSlider(min_val=0.10, max_val=200, default=100.0, step=0.1)
-    delta = params.IntSlider(min_val=-255, max_val=255, default=0, label="Delta")
+    delta = params.IntSlider(min_val=-255, max_val=255, default=0)
     border_type = params.ComboBox(
         options=[
             "BORDER_CONSTANT",
@@ -848,7 +848,7 @@ class GoodFeaturesToTrack(BaseTransform):
     doc_filename = "goodFeaturesToTrack.html"
 
     max_corners = params.IntSlider(min_val=0, max_val=100, default=0)
-    quality_level = params.FloatSlider(min_val=0, max_val=1.0, default=0.1, step=0.001)
+    quality_level = params.FloatSlider(min_val=0.001, max_val=1.0, default=0.1, step=0.001)
     min_distance = params.FloatSlider(min_val=0, max_val=100, default=5, step=0.001)
     block_size = params.IntSlider(min_val=1, max_val=7, default=3, step=2)
     use_harris_detector = params.CheckBox()
