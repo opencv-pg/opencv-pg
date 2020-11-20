@@ -14,6 +14,7 @@ import cv2
 import pytest
 
 from opencv_pg import transforms
+from opencv_pg import support_transforms as supt
 from opencv_pg.models import cv2_constants as cvc
 from opencv_pg.models.transform_windows import get_transform_window
 
@@ -739,7 +740,6 @@ class TestKMeans():
         ('TERM_CRITERIA_MAX_ITER', 5, .01, 200, 1),
         ('TERM_CRITERIA_MAX_ITER', 5, .01, 200, 5),
         ('EPS + MAX_ITER (Either)', 5, .001, 200, 5),
-
     ))
     def test_other_params(self, criteria, k, epsilon, max_iter, attempts):
         """Test Other params"""
@@ -751,6 +751,43 @@ class TestKMeans():
         tf.epsilon = epsilon
         tf.max_iter = max_iter
         tf.attempts = attempts
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+@mock.patch('opencv_pg.models.transforms.InRange.update_widgets_state', lambda x: None)
+class TestInRange():
+
+    @pytest.mark.parametrize('color_range',
+        list(supt.CvtColor.color_range.options)
+    )
+    def test_cvt_color_range(self, color_range):
+        """Test CvtColor Ranges"""
+        _test_single_attr(
+            transforms.InRange,
+            'color_range',
+            cvc.COLOR_BGR2[color_range]
+        )
+
+    @pytest.mark.parametrize('ch1, ch2, ch3', (
+        ((255, 0), (255, 0), (255, 0)),
+        ((125, 125), (125, 125), (125, 125)),
+        ((100, 200), (0, 255), (0, 255)),
+        ((0, 255), (100, 200), (0, 255)),
+        ((0, 255), (0, 255), (100, 255)),
+    ))
+    def test_other_params(self, ch1, ch2, ch3):
+        """Test other param combinations"""
+        # Given
+        window = get_transform_window(transforms.InRange, IMG_PATH)
+        tf = window.transforms[2]
+        tf.ch1['top'], tf.ch1['bot'] = ch1
+        tf.ch2['top'], tf.ch2['bot'] = ch2
+        tf.ch3['top'], tf.ch3['bot'] = ch3
 
         # When
         window.draw(None, None)
