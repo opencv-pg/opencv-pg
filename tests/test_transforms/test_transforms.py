@@ -860,3 +860,36 @@ class TestCornerHarris():
 
         # Then
         _check_error(window)
+
+
+@mock.patch('opencv_pg.models.transforms.GoodFeaturesToTrack.update_widgets_state', lambda x: None)
+@mock.patch('opencv_pg.models.transforms.CornerSubPix.update_widgets_state', lambda x: None)
+class TestCornerSubPix():
+
+    @pytest.mark.parametrize('criteria, win_rows, win_cols, eps, max_iter', (
+        ('TERM_CRITERIA_EPS', 1, 1, .001, 1),
+        ('TERM_CRITERIA_EPS',  100, 100, .001, 1),
+        ('TERM_CRITERIA_EPS',  50, 50, .2, 1),
+        ('TERM_CRITERIA_MAX_ITER', 1, 1, .001, 1),
+        ('TERM_CRITERIA_MAX_ITER',  100, 100, .001, 100),
+        ('TERM_CRITERIA_MAX_ITER',  50, 50, .001, 200),
+        ('EPS + MAX_ITER (Either)', 1, 1, .001, 200),
+        ('EPS + MAX_ITER (Either)', 50, 50, .001, 200),
+        ('EPS + MAX_ITER (Either)', 50, 50, .2, 5),
+    ))
+    def test_other_params(self, criteria, win_rows, win_cols, eps, max_iter):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.CornerSubPix, IMG_PATH)
+        tf = window.transforms[2]
+        tf.criteria = cvc.TERM[criteria]
+        tf.window_size_rows = win_rows
+        tf.window_size_cols = win_cols
+        tf.epsilon = eps
+        tf.max_iter = max_iter
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
