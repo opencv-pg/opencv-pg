@@ -613,18 +613,17 @@ class TestSepFilter2D():
             cvc.BORDERS[border_type]
         )
 
-    @pytest.mark.skip(reason="Broken")
     @pytest.mark.parametrize('kernel_x, kernel_y, delta', (
-        (np.ones((1, 1)), np.ones((1, 5)), 0),
-        (np.ones((1, 5)), np.ones((1, 1)), 0),
-        (np.ones((1, 1)), np.ones((1, 1)), 0),
-        (np.ones((1, 3)), np.ones((1, 3)), -255),
-        (np.ones((1, 3)), np.ones((1, 3)), 255),
+        (np.ones(1), np.ones(5), 0),
+        (np.ones(5), np.ones(1), 0),
+        (np.ones(1), np.ones(1), 0),
+        (np.ones(3), np.ones(3), -255),
+        (np.ones(3), np.ones(3), 255),
     ))
     def test_other_params(self, kernel_x, kernel_y, delta):
         """Test other param combinations"""
         # Given
-        window = get_transform_window(transforms.Remap, IMG_PATH)
+        window = get_transform_window(transforms.SepFilter2D, IMG_PATH)
         tf = window.transforms[1]
         tf.kernel_X = kernel_x
         tf.kernel_Y = kernel_y
