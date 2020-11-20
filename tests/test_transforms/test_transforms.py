@@ -675,3 +675,32 @@ class TestBoxFilter():
 
         # Then
         _check_error(window)
+
+
+class TestFastNIMeansDenoisingColored():
+
+    @pytest.mark.parametrize('temp_win_size, search_win_size, h, h_color', (
+        (1, 1, 3, 7),
+        (7, 3, 3, 7),  # window smaller than template
+        (7, 21, 3, 7),
+        (15, 51, 3, 7),
+        (7, 21, 0, 0),
+        (7, 21, 25, 0),
+        (7, 21, 0, 25),
+        (7, 21, 25, 25),
+    ))
+    def test_other_params(self, temp_win_size, search_win_size, h, h_color):
+        """Test other param combinations"""
+        # Given
+        window = get_transform_window(transforms.FastNIMeansDenoisingColored, IMG_PATH)
+        tf = window.transforms[1]
+        tf.template_window_size = temp_win_size
+        tf.search_window_size = search_win_size
+        tf.h = h
+        tf.h_color = h_color
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
