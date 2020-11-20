@@ -794,3 +794,29 @@ class TestInRange():
 
         # Then
         _check_error(window)
+
+
+class TestInRangeRaw():
+
+    @pytest.mark.parametrize('ch1, ch2, ch3', (
+        ((0, 255), (0, 255), (0, 255)),
+        ((255, 0), (255, 0), (255, 0)),
+        ((125, 125), (125, 125), (125, 125)),
+        ((100, 200), (0, 255), (0, 255)),
+        ((0, 255), (100, 200), (0, 255)),
+        ((0, 255), (0, 255), (100, 255)),
+    ))
+    def test_other_params(self, ch1, ch2, ch3):
+        """Test other param combinations"""
+        # Given
+        window = get_transform_window(transforms.InRangeRaw, IMG_PATH)
+        tf = window.transforms[1]
+        tf.ch1['top'], tf.ch1['bot'] = ch1
+        tf.ch2['top'], tf.ch2['bot'] = ch2
+        tf.ch3['top'], tf.ch3['bot'] = ch3
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
