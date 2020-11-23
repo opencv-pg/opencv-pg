@@ -922,3 +922,38 @@ class TestGoodFeaturesToTrack():
 
         # Then
         _check_error(window)
+
+
+class TestResize():
+
+    @pytest.mark.parametrize(
+        'interp_type',
+        list(transforms.Resize.interpolation_type.options)
+    )
+    def test_criteria(self, interp_type):
+        """Test Criteria options"""
+        _test_single_attr(
+            transforms.Resize,
+            'interpolation_type',
+            cvc.INTERPOLATION[interp_type]
+        )
+
+    @pytest.mark.parametrize('scale_x, scale_y', (
+        (0.005, 0.005),
+        (0.005, 3),
+        (3, 0.005),
+        (3, 3),
+    ))
+    def test_other_params(self, scale_x, scale_y):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.Resize, IMG_PATH)
+        tf = window.transforms[1]
+        tf.scale_x = scale_x
+        tf.scale_y = scale_y
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
