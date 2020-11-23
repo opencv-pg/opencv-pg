@@ -986,3 +986,58 @@ class TestApproxPolyDP():
 
         # Then
         _check_error(window)
+
+
+class TestFindContours():
+
+    @pytest.mark.parametrize(
+        'mode',
+        list(transforms.FindContours.mode.options)
+    )
+    def test_mode_options(self, mode):
+        """Test Mode options"""
+        window = get_transform_window(transforms.FindContours, IMG_PATH)
+        tf = window.transforms[1]
+        tf.mode = cvc.RETR[mode]
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+    @pytest.mark.parametrize(
+        'method',
+        list(transforms.FindContours.method.options)
+    )
+    def test_method_options(self, method):
+        """Test method options"""
+        window = get_transform_window(transforms.FindContours, IMG_PATH)
+        tf = window.transforms[1]
+        tf.method = cvc.CHAIN_APPROX[method]
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+    @pytest.mark.parametrize('thresh', (0, 100 ,255))
+    def test_other_params(self, thresh):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.FindContours, IMG_PATH)
+        tf = window.transforms[1]
+        tf.threshold = thresh
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
