@@ -1080,7 +1080,7 @@ class TestAddWeighted():
     def test_other_params(self, alpha, beta, gamma):
         """Test Other params"""
         # Given
-        window = get_transform_window(transforms.GetGaussianKernel, IMG_PATH)
+        window = get_transform_window(transforms.AddWeighted, IMG_PATH)
         tf = window.transforms[1]
         tf.alpha = alpha
         tf.beta = beta
