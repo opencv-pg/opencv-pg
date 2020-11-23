@@ -925,7 +925,6 @@ class ApproxPolyDP(BaseTransform):
         approx_contours = []
 
         for cont in contours:
-            perimeter = cv2.arcLength(cont, True)
             epsilon = self.epsilon
             approx = cv2.approxPolyDP(cont, epsilon, self.closed)
             approx_contours.append(approx)

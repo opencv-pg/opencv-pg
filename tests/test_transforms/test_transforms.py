@@ -957,3 +957,32 @@ class TestResize():
 
         # Then
         _check_error(window)
+
+
+class TestApproxPolyDP():
+
+    @pytest.mark.parametrize('epsilon, closed', (
+        (0.005, False),
+        (10, False),
+        (30, False),
+        (0.005, True),
+        (10, True),
+        (30, True),
+    ))
+    def test_other_params(self, epsilon, closed):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.ApproxPolyDP, IMG_PATH)
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+        draw_approx = window.transforms[4]
+        draw_approx.enabled = False
+        tf = window.transforms[3]
+        tf.epsilon = epsilon
+        tf.closed = closed
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
