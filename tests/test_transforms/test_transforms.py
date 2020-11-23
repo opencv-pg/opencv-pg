@@ -1041,3 +1041,26 @@ class TestFindContours():
 
         # Then
         _check_error(window)
+
+
+class TestGetGaussianKernel():
+
+    @pytest.mark.parametrize('k_size, sigma', (
+        (1, 1),
+        (1, 31),
+        (31, 1),
+        (5, 5),
+    ))
+    def test_other_params(self, k_size, sigma):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.GetGaussianKernel, IMG_PATH)
+        tf = window.transforms[1]
+        tf.k_size = k_size
+        tf.sigma = sigma
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
