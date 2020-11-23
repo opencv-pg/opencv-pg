@@ -1091,3 +1091,40 @@ class TestAddWeighted():
 
         # Then
         _check_error(window)
+
+
+class TestCornerEigenValsAndVecs():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.CornerEigenValsAndVecs.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test border types"""
+        _test_single_attr(
+            transforms.CornerEigenValsAndVecs,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
+
+    @pytest.mark.parametrize('block_size, k_size, thresh', (
+        (1, 1, 1),
+        (25, 7, 100),
+        (15, 3, 50),
+    ))
+    def test_other_params(self, block_size, k_size, thresh):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.CornerEigenValsAndVecs, IMG_PATH)
+        tf = window.transforms[1]
+        display = window.transforms[2]
+        display.enabled = False
+        tf.block_size = block_size
+        tf.k_size = k_size
+        tf.threshold = thresh
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
