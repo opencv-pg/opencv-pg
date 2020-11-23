@@ -1064,3 +1064,30 @@ class TestGetGaussianKernel():
 
         # Then
         _check_error(window)
+
+
+class TestAddWeighted():
+
+    @pytest.mark.parametrize('alpha, beta, gamma', (
+        (0, 0, 0),
+        (1, 1, 255),
+        (0, 1, 255),
+        (1, 0, 255),
+        (0, 1, 0),
+        (1, 0, 0),
+        (.5, .5, 125),
+    ))
+    def test_other_params(self, alpha, beta, gamma):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.GetGaussianKernel, IMG_PATH)
+        tf = window.transforms[1]
+        tf.alpha = alpha
+        tf.beta = beta
+        tf.gamma = gamma
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
