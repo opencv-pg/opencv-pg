@@ -5,7 +5,7 @@ from qtpy import QtWidgets
 from opencv_pg.models.pipeline import Pipeline
 from opencv_pg.views.pipeline_window import PipeWindow
 
-fmt = "%(levelname)s:%(name)s:%(lineno)d:%(message)s"
+LOG_FORMAT = "%(levelname)s:%(name)s:%(lineno)d:%(message)s"
 
 DEF_SPLIT_PERCENTAGE = 0.5
 DEF_WINDOW_SIZE = (400, 600)
@@ -22,7 +22,7 @@ def launch_pipeline(pipeline: Pipeline, show_info_widgets: bool = False,
             Default is False.
         log_level (logging.LEVEL_NAME): Log level to use. Default is INFO.
     """
-    logging.basicConfig(level=log_level, format=fmt)
+    logging.basicConfig(level=log_level, format=LOG_FORMAT)
     app = QtWidgets.QApplication([])
 
     # Have to keep windows in scope to show them, so store them in a list
