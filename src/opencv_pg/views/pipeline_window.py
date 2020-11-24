@@ -15,8 +15,9 @@ log = logging.getLogger(__name__)
 
 
 class PipeWindow(QtWidgets.QWidget):
-    def __init__(self, window: Window, parent=None):
+    def __init__(self, window: Window, parent=None, show_info_widget=True):
         super().__init__(parent=parent)
+        self.show_info_widget = show_info_widget
         self.window = window
         self.viewer = None
         layout = self._build_layout()
@@ -107,9 +108,10 @@ class PipeWindow(QtWidgets.QWidget):
         transform_vlayout = QtWidgets.QVBoxLayout()
 
         for transform in self.window.transforms:
-            info_widget = transform.get_info_widget()
-            if info_widget is not None:
-                transform_vlayout.addWidget(info_widget)
+            if self.show_info_widget:
+                info_widget = transform.get_info_widget()
+                if info_widget:
+                    transform_vlayout.addWidget(info_widget)
 
             if not transform.params:
                 continue

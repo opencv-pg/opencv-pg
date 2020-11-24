@@ -14,18 +14,19 @@ DEF_WINDOW_SIZE = (400, 600)
 DEF_OFFSET = 30
 
 
-def launch_pipeline(pipeline: Pipeline):
+def launch_pipeline(pipeline: Pipeline, show_info_widgets: bool = False):
     """Opens a PipelineWindow for each Window in the Pipeline
 
     Args:
         pipeline (Pipeline): Incoming Pipeline
+        show_info_widgets (bool): If True, shows info_widgets on Transforms
     """
     app = QtWidgets.QApplication([])
 
     # Have to keep windows in scope to show them, so store them in a list
     windows = []
     for window in pipeline.windows:
-        pipe_win = PipeWindow(window)
+        pipe_win = PipeWindow(window, show_info_widget=show_info_widgets)
         pipe_win.resize(*DEF_WINDOW_SIZE)
         pipe_win.setWindowTitle(window.name)
         windows.append(pipe_win)
@@ -42,7 +43,6 @@ def launch_pipeline(pipeline: Pipeline):
 
         # Stagger windows
         if last_pos is None:
-
             last_pos = (win.x(), win.y())
         else:
             win.move(last_pos[0] + DEF_OFFSET, last_pos[1] + DEF_OFFSET)
