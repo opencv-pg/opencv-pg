@@ -23,7 +23,6 @@ pyrDown
             <li>BORDER_REFLECT</li>
             <li>BORDER_WRAP</li>
             <li>BORDER_REFLECT_101 or BORDER_REFLECT101 or BORDER_DEFAULT</li>
-            <li>BORDER_ISOLATED</li>
         </ul></li>
 </ul>
 {% endblock %}
@@ -31,9 +30,9 @@ pyrDown
 {% block explanation %}
 <p>
     The function performs the downsampling step of the Gaussian pyramid construction. An image pyramid is a collection of images - all arising from a single original image - that are successively downsampled until some desired stopping point is reached.
-    
+
     First, it convolves the source image with the kernel:
-    $$\frac{1}{256} \left[ \begin{array}{ccccc} 
+    $$\frac{1}{256} \left[ \begin{array}{ccccc}
     1 & 4 & 6 & 4 & 1 \\
     4 & 16 & 24 & 16 & 4 \\
     6 & 24 & 36 & 24 & 6 \\
@@ -52,7 +51,7 @@ pyrDown
             <li>\(|\texttt{dstsize.width}\cdot 2 - \texttt{src.cols}| \leq 2\)</li>
             <li>\(|\texttt{dstsize.height}\cdot 2 - \texttt{src.rows}| \leq 2\)</li>
         </ul></li>
-        <li>BORDER_CONSTANT and BORDER_TRANSPARENT are not supported.</li>
+        <li>BORDER_CONSTANT, BORDER_TRANSPARENT, and BORDER_ISOLATED are not supported.</li>
         <li>When we reduce the size of an image, we are actually losing information of the image.</li>
     </ul>
 </p>

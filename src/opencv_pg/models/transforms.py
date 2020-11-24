@@ -1159,7 +1159,6 @@ class PyrDown(BaseTransform):
             "BORDER_REFLECT",
             "BORDER_WRAP",
             "BORDER_DEFAULT",
-            "BORDER_ISOLATED",
         ],
         default="BORDER_DEFAULT",
         options_map=cvc.BORDERS,
