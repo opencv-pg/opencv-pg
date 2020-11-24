@@ -586,3 +586,37 @@ class DrawPyrDown(BaseTransform):
             cr, cc = images[idx].shape[:2]
             out[0:cr, col_s : col_s + cc] = images[idx]
         return out
+
+
+class DrawSplit(BaseTransform):
+    """Display Transform for Split"""
+
+    def draw(self, img_in, extra_in):
+        """extra_in should be output from cv2.split"""
+        out = extra_in
+        rows, cols = img_in.shape[:2]
+        n_rows = 2 * rows + 100
+        combined = np.zeros([n_rows, cols * len(out), img_in.shape[2]], dtype=np.uint8)
+
+        # Add to the original combined image
+        row_e = rows
+        col_s = cols
+        col_e = 2 * cols
+        combined[:row_e, col_s:col_e, :] = img_in
+
+        for idx, img in enumerate(out):
+            combined[100 + rows :, idx * cols : ((idx + 1) * cols), idx] = img
+
+        # Draw an arrow
+        size = 60
+        extra = (100 - size) // 2
+        combined = cv2.arrowedLine(
+            img=combined,
+            pt1=((3 * cols) // 2, cols + extra),
+            pt2=((3 * cols) // 2, cols + extra + size),
+            color=(0, 255, 255),
+            thickness=10,
+            tipLength=0.5,
+        )
+
+        return combined
