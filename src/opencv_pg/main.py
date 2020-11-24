@@ -4,7 +4,7 @@ from .views import playground
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, img_path, no_docs):
+    def __init__(self, img_path, no_docs, disable_info_widgets):
         super().__init__()
         self.setWindowTitle("OpenCV PlayGround")
         self._setup_window_size(0.5)
@@ -12,7 +12,8 @@ class MainWindow(QMainWindow):
         self._add_menus()
 
         # TODO: set this with either playground or designer
-        self.setCentralWidget(playground.Playground(img_path, no_docs))
+        self.setCentralWidget(
+            playground.Playground(img_path, no_docs, disable_info_widgets))
 
     def _setup_window_size(self, fraction):
         """Setup default window dimensions"""

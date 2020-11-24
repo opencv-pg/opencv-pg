@@ -22,7 +22,7 @@ def run_playground(args):
     if img_path is None:
         img_path = get_file_path(ROBOT)
     app = QtWidgets.QApplication([])
-    m = MainWindow(img_path, args.no_docs)
+    m = MainWindow(img_path, args.no_docs, args.disable_info_widgets)
     m.show()
     app.exec_()
 
@@ -61,6 +61,12 @@ def main():
         "--no-docs",
         action="store_true",
         help="Do not load the doc window",
+        default=False,
+    )
+    parser.add_argument(
+        "--disable-info-widgets",
+        action="store_true",
+        help="Disable all info widgets if True",
         default=False,
     )
     args = parser.parse_args()
