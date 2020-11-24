@@ -1128,3 +1128,32 @@ class TestCornerEigenValsAndVecs():
 
         # Then
         _check_error(window)
+
+
+class TestPyrDown():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.PyrDown.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test border types"""
+        _test_single_attr(
+            transforms.PyrDown,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
+
+    @pytest.mark.parametrize('n_images', (1, 2, 3, 4, 5))
+    def test_other_params(self, n_images):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.PyrDown, IMG_PATH)
+        tf = window.transforms[1]
+        tf.n_images = n_images
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
