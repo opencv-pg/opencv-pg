@@ -922,3 +922,238 @@ class TestGoodFeaturesToTrack():
 
         # Then
         _check_error(window)
+
+
+class TestResize():
+
+    @pytest.mark.parametrize(
+        'interp_type',
+        list(transforms.Resize.interpolation_type.options)
+    )
+    def test_criteria(self, interp_type):
+        """Test Criteria options"""
+        _test_single_attr(
+            transforms.Resize,
+            'interpolation_type',
+            cvc.INTERPOLATION[interp_type]
+        )
+
+    @pytest.mark.parametrize('scale_x, scale_y', (
+        (0.005, 0.005),
+        (0.005, 3),
+        (3, 0.005),
+        (3, 3),
+    ))
+    def test_other_params(self, scale_x, scale_y):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.Resize, IMG_PATH)
+        tf = window.transforms[1]
+        tf.scale_x = scale_x
+        tf.scale_y = scale_y
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+class TestApproxPolyDP():
+
+    @pytest.mark.parametrize('epsilon, closed', (
+        (0.005, False),
+        (10, False),
+        (30, False),
+        (0.005, True),
+        (10, True),
+        (30, True),
+    ))
+    def test_other_params(self, epsilon, closed):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.ApproxPolyDP, IMG_PATH)
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+        draw_approx = window.transforms[4]
+        draw_approx.enabled = False
+        tf = window.transforms[3]
+        tf.epsilon = epsilon
+        tf.closed = closed
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+class TestFindContours():
+
+    @pytest.mark.parametrize(
+        'mode',
+        list(transforms.FindContours.mode.options)
+    )
+    def test_mode_options(self, mode):
+        """Test Mode options"""
+        window = get_transform_window(transforms.FindContours, IMG_PATH)
+        tf = window.transforms[1]
+        tf.mode = cvc.RETR[mode]
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+    @pytest.mark.parametrize(
+        'method',
+        list(transforms.FindContours.method.options)
+    )
+    def test_method_options(self, method):
+        """Test method options"""
+        window = get_transform_window(transforms.FindContours, IMG_PATH)
+        tf = window.transforms[1]
+        tf.method = cvc.CHAIN_APPROX[method]
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+    @pytest.mark.parametrize('thresh', (0, 100 ,255))
+    def test_other_params(self, thresh):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.FindContours, IMG_PATH)
+        tf = window.transforms[1]
+        tf.threshold = thresh
+        draw_cont = window.transforms[2]
+        draw_cont.enabled = False
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+class TestGetGaussianKernel():
+
+    @pytest.mark.parametrize('k_size, sigma', (
+        (1, 1),
+        (1, 31),
+        (31, 1),
+        (5, 5),
+    ))
+    def test_other_params(self, k_size, sigma):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.GetGaussianKernel, IMG_PATH)
+        tf = window.transforms[1]
+        tf.k_size = k_size
+        tf.sigma = sigma
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+class TestAddWeighted():
+
+    @pytest.mark.parametrize('alpha, beta, gamma', (
+        (0, 0, 0),
+        (1, 1, 255),
+        (0, 1, 255),
+        (1, 0, 255),
+        (0, 1, 0),
+        (1, 0, 0),
+        (.5, .5, 125),
+    ))
+    def test_other_params(self, alpha, beta, gamma):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.AddWeighted, IMG_PATH)
+        tf = window.transforms[1]
+        tf.alpha = alpha
+        tf.beta = beta
+        tf.gamma = gamma
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+class TestCornerEigenValsAndVecs():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.CornerEigenValsAndVecs.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test border types"""
+        _test_single_attr(
+            transforms.CornerEigenValsAndVecs,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
+
+    @pytest.mark.parametrize('block_size, k_size, thresh', (
+        (1, 1, 1),
+        (25, 7, 100),
+        (15, 3, 50),
+    ))
+    def test_other_params(self, block_size, k_size, thresh):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.CornerEigenValsAndVecs, IMG_PATH)
+        tf = window.transforms[1]
+        display = window.transforms[2]
+        display.enabled = False
+        tf.block_size = block_size
+        tf.k_size = k_size
+        tf.threshold = thresh
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)
+
+
+class TestPyrDown():
+
+    @pytest.mark.parametrize(
+        'border_type',
+        list(transforms.PyrDown.border_type.options)
+    )
+    def test_border_types(self, border_type):
+        """Test border types"""
+        _test_single_attr(
+            transforms.PyrDown,
+            'border_type',
+            cvc.BORDERS[border_type]
+        )
+
+    @pytest.mark.parametrize('n_images', (1, 2, 3, 4, 5))
+    def test_other_params(self, n_images):
+        """Test Other params"""
+        # Given
+        window = get_transform_window(transforms.PyrDown, IMG_PATH)
+        tf = window.transforms[1]
+        tf.n_images = n_images
+
+        # When
+        window.draw(None, None)
+
+        # Then
+        _check_error(window)

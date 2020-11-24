@@ -925,7 +925,6 @@ class ApproxPolyDP(BaseTransform):
         approx_contours = []
 
         for cont in contours:
-            perimeter = cv2.arcLength(cont, True)
             epsilon = self.epsilon
             approx = cv2.approxPolyDP(cont, epsilon, self.closed)
             approx_contours.append(approx)
@@ -1160,7 +1159,6 @@ class PyrDown(BaseTransform):
             "BORDER_REFLECT",
             "BORDER_WRAP",
             "BORDER_DEFAULT",
-            "BORDER_ISOLATED",
         ],
         default="BORDER_DEFAULT",
         options_map=cvc.BORDERS,
