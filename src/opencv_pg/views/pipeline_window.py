@@ -17,12 +17,12 @@ log = logging.getLogger(__name__)
 class PipeWindow(QtWidgets.QWidget):
     def __init__(self, window: Window, parent=None, show_info_widget=True):
         super().__init__(parent=parent)
+        self.show_info_widget = show_info_widget
         self.window = window
         self.viewer = None
         layout = self._build_layout()
         self.setLayout(layout)
         self.window.image_updated.connect(self._handle_pipeline_completed)
-        self.show_info_widget = show_info_widget
 
     def set_splitter_pos(self, percent):
         """Set the splitter `percent` of the way down the window"""
