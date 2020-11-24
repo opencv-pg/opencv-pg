@@ -19,7 +19,7 @@ _TRANS_WINDOWS = {
     tf.CopyMakeBorder: [_LOADER_CLASS, tf.CopyMakeBorder],
     tf.Normalize: [_LOADER_CLASS, tf.Normalize],
     tf.Split: [_LOADER_CLASS, tf.Split, supt.DrawSplit],
-    tf.Merge: [_LOADER_CLASS, tf.Merge],
+    tf.Merge: [_LOADER_CLASS, tf.Split, tf.Merge, supt.DrawMerge],
     tf.Filter2D: [_LOADER_CLASS, tf.Filter2D],
     tf.Canny: [_LOADER_CLASS, tf.Canny],
     tf.HoughLines: [

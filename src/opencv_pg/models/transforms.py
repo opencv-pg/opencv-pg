@@ -160,51 +160,8 @@ class Merge(BaseTransform):
 
     def draw(self, img_in, extra_in):
         """Since need to merge multiple channels to 1, first split, then merge"""
-        rows, cols = img_in.shape[:2]
-        out = cv2.split(img_in)
-        n_rows = 2 * rows + 100
-        combined = np.zeros([n_rows, cols * len(out), img_in.shape[2]], dtype=np.uint8)
-
-        # Build original image as three channels
-        for idx, img in enumerate(out):
-            combined[:rows, idx * cols : ((idx + 1) * cols), idx] = img
-
-        # Create merged image
-        merged = cv2.merge(out)
-
-        # Add to the original combined image
-        row_s = rows + 100
-        row_e = 2 * rows + 100
-        col_s = cols
-        col_e = 2 * cols
-        combined[row_s:row_e, col_s:col_e, :] = merged
-
-        # Draw an arrow
-        size = 60
-        extra = (100 - size) // 2
-        combined = cv2.arrowedLine(
-            img=combined,
-            pt1=((3 * cols) // 2, cols + extra),
-            pt2=((3 * cols) // 2, cols + extra + size),
-            color=(0, 255, 255),
-            thickness=10,
-            tipLength=0.5,
-        )
-
-        return combined
-
-    def get_info_widget(self):
-        """Adds labels centered under the images describing the channel"""
-        wid = QtWidgets.QWidget()
-        layout = QtWidgets.QHBoxLayout()
-        left = QtWidgets.QLabel("Blue Channel", alignment=QtCore.Qt.AlignLeft)
-        mid = QtWidgets.QLabel("Green Channel", alignment=QtCore.Qt.AlignCenter)
-        right = QtWidgets.QLabel("Red Channel", alignment=QtCore.Qt.AlignRight)
-        layout.addWidget(left)
-        layout.addWidget(mid)
-        layout.addWidget(right)
-        wid.setLayout(layout)
-        return wid
+        merged = cv2.merge(extra_in)
+        return img_in, merged
 
 
 class Filter2D(BaseTransform):
