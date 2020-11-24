@@ -56,7 +56,7 @@ _TRANS_WINDOWS = {
         tf.CornerHarris,
         supt.DisplayHarris,
     ],
-    tf.PyrDown: [_LOADER_CLASS, tf.PyrDown],
+    tf.PyrDown: [_LOADER_CLASS, tf.PyrDown, supt.DrawPyrDown],
     tf.FillPoly: [supt.BlankCanvas, tf.FillPoly],
     tf.BoxFilter: [_LOADER_CLASS, tf.BoxFilter],
     tf.Sobel: [_LOADER_CLASS, tf.Sobel],

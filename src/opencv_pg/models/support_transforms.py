@@ -563,3 +563,26 @@ class DrawGaussianKernel(BaseTransform):
         scale = num_rows / gaus.k_size
         img = cv2.resize(img, dsize=(0, 0), fx=scale, fy=scale)
         return img
+
+
+class DrawPyrDown(BaseTransform):
+    """Display Transform for PyrDown"""
+
+    def draw(self, img_in, extra_in):
+        """extra_in should be a list of the new images from pyrDown"""
+        images = extra_in
+
+        depth = 0 if len(images[0].shape) == 2 else images[0].shape[2]
+
+        col_pix = [0] + [x.shape[1] for x in images]
+        col_tot = np.sum(col_pix)
+        row_tot = images[0].shape[0]
+        shape = (row_tot, col_tot, depth) if depth else (row_tot, col_tot)
+        out = np.zeros(shape, dtype=np.uint8)
+        col_starts = np.cumsum(col_pix)
+
+        for idx in range(len(images)):
+            col_s = col_starts[idx]
+            cr, cc = images[idx].shape[:2]
+            out[0:cr, col_s : col_s + cc] = images[idx]
+        return out
