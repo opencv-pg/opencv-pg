@@ -547,3 +547,19 @@ class DrawContours(BaseTransform):
             lineType=self.line_type,
         )
         return img_in, contours
+
+
+class DrawGaussianKernel(BaseTransform):
+    """Display Transform for GetGaussianKernel"""
+
+    def draw(self, img_in, extra_in):
+        """extra_in should be the output from cv2.getGaussianKernel
+
+        This assumes the preceding transform is GetGaussianKernel
+        """
+        gaus = self.get_transform(1)
+        img = np.tile(extra_in, (1, gaus.k_size)) * 255
+        num_rows = img_in.shape[0]
+        scale = num_rows / gaus.k_size
+        img = cv2.resize(img, dsize=(0, 0), fx=scale, fy=scale)
+        return img

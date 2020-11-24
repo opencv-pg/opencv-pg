@@ -61,7 +61,7 @@ _TRANS_WINDOWS = {
     tf.BoxFilter: [_LOADER_CLASS, tf.BoxFilter],
     tf.Sobel: [_LOADER_CLASS, tf.Sobel],
     tf.Resize: [_LOADER_CLASS, tf.Resize],
-    tf.GetGaussianKernel: [_LOADER_CLASS, tf.GetGaussianKernel],
+    tf.GetGaussianKernel: [_LOADER_CLASS, tf.GetGaussianKernel, supt.DrawGaussianKernel],
     tf.AddWeighted: [_LOADER_CLASS, tf.AddWeighted],
     tf.CornerEigenValsAndVecs: [
         _LOADER_CLASS,

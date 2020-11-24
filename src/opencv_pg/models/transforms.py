@@ -993,11 +993,7 @@ class GetGaussianKernel(BaseTransform):
 
     def draw(self, img_in, extra_in):
         out = cv2.getGaussianKernel(ksize=self.k_size, sigma=self.sigma)
-        img = np.tile(out, (1, self.k_size)) * 255
-        num_rows = img_in.shape[0]
-        scale = num_rows / self.k_size
-        img = cv2.resize(img, dsize=(0, 0), fx=scale, fy=scale)
-        return img
+        return img_in, out
 
 
 class MatchTemplate(BaseTransform):
