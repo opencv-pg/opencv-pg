@@ -335,7 +335,7 @@ class SliderPair(SliderContainer):
             slider=top_slider, editable_range=editable_range, parent=parent,
             show_editable_value=False
         )
-        self.main_layout().children()[0].insertWidget(1, bot_slider)
+        self.layout().children()[0].insertWidget(1, bot_slider)
         top_slider.value_changed.connect(self._emit_top_changed)
         bot_slider.value_changed.connect(self._emit_bot_changed)
 
