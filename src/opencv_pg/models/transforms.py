@@ -575,8 +575,8 @@ class FastNIMeansDenoisingColored(BaseTransform):
 
     template_window_size = params.IntSlider(min_val=1, max_val=15, default=7, step=2)
     search_window_size = params.IntSlider(min_val=1, max_val=51, default=21, step=2)
-    h = params.FloatSlider(min_val=0, max_val=25, default=3)
-    h_color = params.FloatSlider(min_val=0, max_val=25, default=7)
+    h = params.IntSlider(min_val=0, max_val=25, default=3, step=1)
+    h_color = params.IntSlider(min_val=0, max_val=25, default=7, step=1)
 
     def draw(self, img_in, extra_in):
         out = cv2.fastNlMeansDenoisingColored(
