@@ -130,6 +130,7 @@ class BaseSlider(Param):
         widget.setValue(self.default)
         widget.value_changed.connect(self._handle_value_changed)
         container = SliderContainer(widget, editable_range=self.editable_range)
+        container.slider_text.setText(str(self.default))
         return container
 
     def set_step(self, step):
