@@ -146,6 +146,9 @@ class EditableQLabel(QtWidgets.QStackedWidget):
     def setText(self, text):
         self.label.setText(text)
 
+    def set_width(self, width):
+        self.setFixedWidth(width)
+
     def eventFilter(self, obj: QtWidgets.QWidget, event: QtCore.QEvent):
         """Handle events for QLabel or QLineEdit"""
         if obj == self.label:
@@ -189,13 +192,19 @@ class SliderContainer(QtWidgets.QWidget):
 
     def __init__(self, slider, editable_range, parent=None):
         super().__init__(parent=parent)
-        layout = QtWidgets.QVBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         self.setLayout(layout)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
+        slider_vbox = QtWidgets.QVBoxLayout()
+
         self.slider = slider
         self.slider.setParent(self)
         _min, _max = slider.minimum(), slider.maximum()
+
+        self.slider_text = EditableQLabel(
+            str(self.slider.value()), alignment=QtCore.Qt.AlignRight)
+        layout.addWidget(self.slider_text)
 
         # Labels
         self.min_label, self.max_label = self._get_minmax_labels(
@@ -203,15 +212,28 @@ class SliderContainer(QtWidgets.QWidget):
         )
 
         # Hbox
-        self.hbox = QtWidgets.QHBoxLayout()
-        self.hbox.setContentsMargins(5, 0, 0, 0)
-        self.hbox.setSpacing(0)
-        self.hbox.addWidget(self.min_label)
-        self.hbox.addWidget(self.max_label)
-        self.hbox.setAlignment(self.min_label, QtCore.Qt.AlignLeft)
-        self.hbox.setAlignment(self.max_label, QtCore.Qt.AlignRight)
-        layout.addWidget(self.slider)
-        layout.addLayout(self.hbox)
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.setContentsMargins(5, 0, 0, 0)
+        hbox.setSpacing(0)
+        hbox.addWidget(self.min_label)
+        hbox.addWidget(self.max_label)
+        hbox.setAlignment(self.min_label, QtCore.Qt.AlignLeft)
+        hbox.setAlignment(self.max_label, QtCore.Qt.AlignRight)
+        slider_vbox.addWidget(self.slider)
+        slider_vbox.addLayout(hbox)
+        layout.addLayout(slider_vbox)
+
+        self.slider.valueChanged.connect(self._handle_slider_changed)
+
+    @QtCore.Slot(float)
+    @QtCore.Slot(int)
+    def _handle_slider_changed(self, _):
+        val = self.slider.value()
+        if isinstance(val, float):
+            real_val = f"{val:0.4f}"
+        else:
+            real_val = str(val)
+        self.slider_text.setText(real_val)
 
     def _get_minmax_labels(self, slider, bot, top, editable_range):
         """Return either standard QLabel or EditableQLabel w/ connected slots"""
