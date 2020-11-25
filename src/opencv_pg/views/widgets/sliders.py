@@ -195,33 +195,33 @@ class SliderContainer(QtWidgets.QWidget):
 
     def __init__(self, slider, editable_range, parent=None, show_editable_value=True):
         super().__init__(parent=parent)
-        layout = QtWidgets.QHBoxLayout()
-        self.setLayout(layout)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        slider_vbox = QtWidgets.QVBoxLayout()
-        slider_vbox.setContentsMargins(5, 0, 0, 0)
+        main_layout = QtWidgets.QHBoxLayout()
+        self.setLayout(main_layout)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
 
+        # Slider
         self.slider = slider
         self.slider.setParent(self)
         _min, _max = slider.minimum(), slider.maximum()
 
+        # Slider Text
         slider_validator = self._get_validator(self.slider, _min, _max)
         self.slider_text = EditableQLabel(
             str(self.slider.value()),
             width=40,
             validator=slider_validator,
-            alignment=QtCore.Qt.AlignRight)
-        layout.addWidget(self.slider_text)
+            alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
+        main_layout.addWidget(self.slider_text)
         if not show_editable_value:
             self.slider_text.setVisible(False)
 
-        # Labels
+
+        # Min/Max Labels
         self.min_label, self.max_label = self._get_minmax_labels(
             self.slider, _min, _max, editable_range
         )
 
-        # Hbox
         hbox = QtWidgets.QHBoxLayout()
         hbox.setContentsMargins(5, 0, 0, 0)
         hbox.setSpacing(0)
@@ -229,20 +229,28 @@ class SliderContainer(QtWidgets.QWidget):
         hbox.addWidget(self.max_label)
         hbox.setAlignment(self.min_label, QtCore.Qt.AlignLeft)
         hbox.setAlignment(self.max_label, QtCore.Qt.AlignRight)
+
+        # Contains slider and min/max labeel container
+        slider_vbox = QtWidgets.QVBoxLayout()
+        slider_vbox.setContentsMargins(5, 0, 0, 0)
         slider_vbox.addWidget(self.slider)
         slider_vbox.addLayout(hbox)
-        layout.addLayout(slider_vbox)
 
+        main_layout.addLayout(slider_vbox)
+
+        # Change handlers for slider and its text box
         self.slider.valueChanged.connect(self._handle_slider_changed)
-        self.slider_text.valueChanged.connect(self._handle_slider_input)
+        self.slider_text.valueChanged.connect(self._handle_slider_text_input)
 
     @QtCore.Slot(str)
-    def _handle_slider_input(self, val):
+    def _handle_slider_text_input(self, val):
+        """Set slider to specified value"""
         self.slider.setValue(float(val))
 
     @QtCore.Slot(float)
     @QtCore.Slot(int)
     def _handle_slider_changed(self, _):
+        """Update slider text"""
         val = self.slider.value()
         if isinstance(val, float):
             n_chars = len(str(self.slider.interval).split(".")[1])
@@ -320,7 +328,7 @@ class SliderPair(SliderContainer):
             slider=top_slider, editable_range=editable_range, parent=parent,
             show_editable_value=False
         )
-        self.layout().children()[0].insertWidget(1, bot_slider)
+        self.main_layout().children()[0].insertWidget(1, bot_slider)
         top_slider.value_changed.connect(self._emit_top_changed)
         bot_slider.value_changed.connect(self._emit_bot_changed)
 
