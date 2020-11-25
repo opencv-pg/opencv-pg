@@ -197,13 +197,17 @@ class SliderContainer(QtWidgets.QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         slider_vbox = QtWidgets.QVBoxLayout()
+        slider_vbox.setContentsMargins(10, 0, 0, 0)
 
         self.slider = slider
         self.slider.setParent(self)
         _min, _max = slider.minimum(), slider.maximum()
 
+        slider_validator = self._get_validator(self.slider, _min, _max)
         self.slider_text = EditableQLabel(
-            str(self.slider.value()), alignment=QtCore.Qt.AlignRight)
+            str(self.slider.value()),
+            validator=slider_validator,
+            alignment=QtCore.Qt.AlignRight)
         layout.addWidget(self.slider_text)
 
         # Labels
@@ -224,6 +228,11 @@ class SliderContainer(QtWidgets.QWidget):
         layout.addLayout(slider_vbox)
 
         self.slider.valueChanged.connect(self._handle_slider_changed)
+        self.slider_text.valueChanged.connect(self._handle_slider_input)
+
+    @QtCore.Slot(str)
+    def _handle_slider_input(self, val):
+        self.slider.setValue(float(val))
 
     @QtCore.Slot(float)
     @QtCore.Slot(int)
@@ -255,6 +264,13 @@ class SliderContainer(QtWidgets.QWidget):
 
         return min_label, max_label
 
+    def _update_slider_text_validator(self):
+        """Sets the slider_text validator to current slider min/max"""
+        _min = self.slider.minimum()
+        _max = self.slider.maximum()
+        validator = self._get_validator(self.slider, _min, _max)
+        self.slider_text.set_validator(validator)
+
     @QtCore.Slot(str)
     def _handle_min_changed(self, value):
         """Update slider min value and limits of max_label validator"""
@@ -265,6 +281,7 @@ class SliderContainer(QtWidgets.QWidget):
         validator = self._get_validator(self.slider, value, 1000000000)
         self.max_label.set_validator(validator)
         self.slider.setMinimum(value)
+        self._update_slider_text_validator()
 
     @QtCore.Slot(str)
     def _handle_max_changed(self, value):
@@ -276,6 +293,7 @@ class SliderContainer(QtWidgets.QWidget):
         validator = self._get_validator(self.slider, -1000000000, value)
         self.min_label.set_validator(validator)
         self.slider.setMaximum(value)
+        self._update_slider_text_validator()
 
     def _get_validator(self, slider, bot, top):
         """Return proper validator based on slider type"""
