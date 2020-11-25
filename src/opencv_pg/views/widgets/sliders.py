@@ -140,7 +140,7 @@ class EditableQLabel(QtWidgets.QStackedWidget):
     def __init__(self, txt, alignment, validator=None, width=80, parent=None):
         super().__init__(parent=parent)
         self.setFixedWidth(width)
-        self.setFixedHeight(25)
+        self.setFixedHeight(20)
         self.edit = QtWidgets.QLineEdit()
         self.edit.setAlignment(alignment)
         if validator:
@@ -217,9 +217,9 @@ class SliderContainer(QtWidgets.QWidget):
         slider_validator = self._get_validator(self.slider, _min, _max)
         self.slider_text = EditableQLabel(
             str(self.slider.value()),
-            width=40,
+            width=45,
             validator=slider_validator,
-            alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
+            alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
         main_layout.addWidget(self.slider_text)
         if not show_editable_value:
             self.slider_text.setVisible(False)

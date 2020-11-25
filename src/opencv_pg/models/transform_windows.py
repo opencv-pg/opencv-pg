@@ -3,6 +3,7 @@ import logging
 from .pipeline import Window
 from . import support_transforms as supt
 from . import transforms as tf
+from .base_transform import BaseTransform
 
 from opencv_pg.docs.doc_writer import render_local_doc, RENDERED_DIR
 
@@ -85,7 +86,7 @@ _TRANS_WINDOWS = {
         tf.FindContours,
         supt.DrawContours,
         tf.ApproxPolyDP,
-        supt.DrawContours,
+        supt.DrawContours(color=(0, 0, 255)),
     ],
     tf.FindContours: [_LOADER_CLASS, tf.FindContours, supt.DrawContours],
     tf.MatchTemplate: [_LOADER_CLASS, tf.MatchTemplate],
@@ -134,7 +135,7 @@ def get_transform_window(transform, img_path):
         loader = _LOADER_CLASS(img_path)
 
     if loader is None:
-        trans_inst = [x() for x in transforms]
+        trans_inst = [x if isinstance(x, BaseTransform) else x() for x in transforms]
     else:
-        trans_inst = [loader] + [x() for x in transforms[1:]]
+        trans_inst = [loader] + [x if isinstance(x, BaseTransform) else x() for x in transforms[1:]]
     return Window(trans_inst)
