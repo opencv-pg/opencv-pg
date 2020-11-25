@@ -117,8 +117,10 @@ class FloatQSlider(DoubleSlider):
     def _handle_changed(self, val):
         """Re-Emit the underlying value and not the index"""
         real_val = float(self.value())
-        self.setToolTip(f"{real_val:0.4f}")
-        self._show_tooltip(f"{real_val:0.4f}", 3, -40)
+        n_chars = len(str(self.interval).split(".")[1])
+        fmt = f"0.{n_chars}f"
+        self.setToolTip(f"{real_val:{fmt}}")
+        self._show_tooltip(f"{real_val:{fmt}}", 3, -40)
         self.value_changed.emit(float(self.value()))
 
 
@@ -243,7 +245,9 @@ class SliderContainer(QtWidgets.QWidget):
     def _handle_slider_changed(self, _):
         val = self.slider.value()
         if isinstance(val, float):
-            real_val = f"{val:0.4f}"
+            n_chars = len(str(self.slider.interval).split(".")[1])
+            fmt = f"0.{n_chars}f"
+            real_val = f"{val:{fmt}}"
         else:
             real_val = str(val)
         self.slider_text.setText(real_val)
