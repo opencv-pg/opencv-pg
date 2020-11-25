@@ -130,6 +130,7 @@ class EditableQLabel(QtWidgets.QStackedWidget):
     def __init__(self, txt, alignment, validator=None, width=80, parent=None):
         super().__init__(parent=parent)
         self.setFixedWidth(width)
+        self.setFixedHeight(25)
         self.edit = QtWidgets.QLineEdit()
         self.edit.setAlignment(alignment)
         if validator:
@@ -190,14 +191,14 @@ class SliderContainer(QtWidgets.QWidget):
     change the min/max.
     """
 
-    def __init__(self, slider, editable_range, parent=None):
+    def __init__(self, slider, editable_range, parent=None, show_editable_value=True):
         super().__init__(parent=parent)
         layout = QtWidgets.QHBoxLayout()
         self.setLayout(layout)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         slider_vbox = QtWidgets.QVBoxLayout()
-        slider_vbox.setContentsMargins(10, 0, 0, 0)
+        slider_vbox.setContentsMargins(5, 0, 0, 0)
 
         self.slider = slider
         self.slider.setParent(self)
@@ -206,9 +207,12 @@ class SliderContainer(QtWidgets.QWidget):
         slider_validator = self._get_validator(self.slider, _min, _max)
         self.slider_text = EditableQLabel(
             str(self.slider.value()),
+            width=40,
             validator=slider_validator,
             alignment=QtCore.Qt.AlignRight)
         layout.addWidget(self.slider_text)
+        if not show_editable_value:
+            self.slider_text.setVisible(False)
 
         # Labels
         self.min_label, self.max_label = self._get_minmax_labels(
@@ -309,9 +313,10 @@ class SliderPair(SliderContainer):
 
     def __init__(self, top_slider, bot_slider, editable_range, parent=None):
         super().__init__(
-            slider=top_slider, editable_range=editable_range, parent=parent
+            slider=top_slider, editable_range=editable_range, parent=parent,
+            show_editable_value=False
         )
-        self.layout().insertWidget(0, bot_slider)
+        self.layout().children()[0].insertWidget(1, bot_slider)
         top_slider.value_changed.connect(self._emit_top_changed)
         bot_slider.value_changed.connect(self._emit_bot_changed)
 
