@@ -45,7 +45,7 @@ class DoubleSlider(QtWidgets.QSlider):
     @QtCore.Slot()
     def _handle_slider_pressed(self):
         """Show tooltip when slider is pressed"""
-        self._show_tooltip(str(self.value()), 3, -40)
+        self._show_tooltip(str(self.value()), 3, -45)
 
     def setValue(self, value):
         index = round((value - self._min) / self.interval)
@@ -93,6 +93,15 @@ class DoubleSlider(QtWidgets.QSlider):
         """
         event.ignore()
 
+    def get_interval_fmt_str(self):
+        parts = str(self.interval).split(".")
+        if len(parts) > 1:
+            n_chars = len(parts[1])
+        else:
+            n_chars = 0
+
+        return f"0.{n_chars}f"
+
 
 class IntQSlider(DoubleSlider):
     """A QSlider that will emit integers"""
@@ -117,8 +126,7 @@ class FloatQSlider(DoubleSlider):
     def _handle_changed(self, val):
         """Re-Emit the underlying value and not the index"""
         real_val = float(self.value())
-        n_chars = len(str(self.interval).split(".")[1])
-        fmt = f"0.{n_chars}f"
+        fmt = self.get_interval_fmt_str()
         self.setToolTip(f"{real_val:{fmt}}")
         self._show_tooltip(f"{real_val:{fmt}}", 3, -40)
         self.value_changed.emit(float(self.value()))
@@ -253,8 +261,7 @@ class SliderContainer(QtWidgets.QWidget):
         """Update slider text"""
         val = self.slider.value()
         if isinstance(val, float):
-            n_chars = len(str(self.slider.interval).split(".")[1])
-            fmt = f"0.{n_chars}f"
+            fmt = self.slider.get_interval_fmt_str()
             real_val = f"{val:{fmt}}"
         else:
             real_val = str(val)
