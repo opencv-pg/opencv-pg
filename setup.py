@@ -25,13 +25,14 @@ def read(*names, **kwargs):
 
 setup(
     name='opencv-pg',
-    version='0.9.0',
+    version='1.0.0',
     license='GPL-3.0-or-later',
     description='Qt5 GUI Application for realtime exploration of OpenCV functions',
-    long_description='%s\n%s' % (
+    long_description="%s\n%s" % (
         re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.md')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.md'))
     ),
+    long_description_content_type="text/markdown",
     author='',
     author_email='',
     url='https://github.com/opencv-pg/opencv-pg',
@@ -56,8 +57,8 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
     ],
     project_urls={
-        'Changelog': '',
-        'Issue Tracker': '',
+        'Changelog': 'https://github.com/opencv-pg/opencv-pg/blob/master/CHANGELOG.md',
+        'Issue Tracker': 'https://github.com/opencv-pg/opencv-pg/issues',
     },
     keywords=[
         'opencv', 'cv2', 'cv', 'computer vision',
