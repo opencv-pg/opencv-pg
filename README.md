@@ -24,6 +24,42 @@ From Github Repo:
 pip install git+https://github.com/opencv-pg/opencv-pg
 ```
 
+### Note for Linux Users
+On Ubuntu 16.04 (others currently untested), there may be missing links to xcb related shared objects.
+
+tldr;
+
+```shell
+sudo apt-get install --reinstall libxcb-xinerama0
+```
+
+------
+
+**Digging Deeper**
+
+If you see errors about xcb, you can perform the following to help troubleshoot. In your terminal, make the following export:
+
+```shell
+export QT_DEBUG_PLUGINS=1
+```
+
+Run opencvpg again and validate the output. The final lines will likely mention details about files not found. Likely `libxcb-xinerama.so.0`.
+
+Run the following:
+
+```shell
+cd your_venv/lib/pythonX.X/site-packages/PySide2/Qt/plugins/platforms/
+ldd libqxcb.so | grep "not found"
+```
+
+This will print any missing links. In our case, `libxcb-xinerama.so.0` showed up a couple times. Reinstalling the package as follows resolved the issue:
+
+```shell
+sudo apt-get install --reinstall libxcb-xinerama0
+```
+
+Once it’s working, you may want to disable that `QT_DEBUG_PLUGINS` env variable so it doesn’t throw extra garbage in your output.
+
 ## Usage
 ### Playground
 To launch the OpenCV Playground with:
