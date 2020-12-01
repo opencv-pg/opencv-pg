@@ -547,3 +547,112 @@ class DrawContours(BaseTransform):
             lineType=self.line_type,
         )
         return img_in, contours
+
+
+class DrawGaussianKernel(BaseTransform):
+    """Display Transform for GetGaussianKernel"""
+
+    def draw(self, img_in, extra_in):
+        """extra_in should be the output from cv2.getGaussianKernel
+
+        This assumes the preceding transform is GetGaussianKernel
+        """
+        gaus = self.get_transform(1)
+        img = np.tile(extra_in, (1, gaus.k_size)) * 255
+        num_rows = img_in.shape[0]
+        scale = num_rows / gaus.k_size
+        img = cv2.resize(img, dsize=(0, 0), fx=scale, fy=scale)
+        return img
+
+
+class DrawPyrDown(BaseTransform):
+    """Display Transform for PyrDown"""
+
+    def draw(self, img_in, extra_in):
+        """extra_in should be a list of the new images from pyrDown"""
+        images = extra_in
+
+        depth = 0 if len(images[0].shape) == 2 else images[0].shape[2]
+
+        col_pix = [0] + [x.shape[1] for x in images]
+        col_tot = np.sum(col_pix)
+        row_tot = images[0].shape[0]
+        shape = (row_tot, col_tot, depth) if depth else (row_tot, col_tot)
+        out = np.zeros(shape, dtype=np.uint8)
+        col_starts = np.cumsum(col_pix)
+
+        for idx in range(len(images)):
+            col_s = col_starts[idx]
+            cr, cc = images[idx].shape[:2]
+            out[0:cr, col_s : col_s + cc] = images[idx]
+        return out
+
+
+class DrawSplit(BaseTransform):
+    """Display Transform for Split"""
+
+    def draw(self, img_in, extra_in):
+        """extra_in should be output from cv2.split"""
+        out = extra_in
+        rows, cols = img_in.shape[:2]
+        n_rows = 2 * rows + 100
+        combined = np.zeros([n_rows, cols * len(out), img_in.shape[2]], dtype=np.uint8)
+
+        # Add to the original combined image
+        row_e = rows
+        col_s = cols
+        col_e = 2 * cols
+        combined[:row_e, col_s:col_e, :] = img_in
+
+        for idx, img in enumerate(out):
+            combined[100 + rows :, idx * cols : ((idx + 1) * cols), idx] = img
+
+        # Draw an arrow
+        size = 60
+        extra = (100 - size) // 2
+        combined = cv2.arrowedLine(
+            img=combined,
+            pt1=((3 * cols) // 2, cols + extra),
+            pt2=((3 * cols) // 2, cols + extra + size),
+            color=(0, 255, 255),
+            thickness=10,
+            tipLength=0.5,
+        )
+
+        return combined
+
+
+class DrawMerge(BaseTransform):
+    """Display Transform for Merge"""
+
+    def draw(self, img_in, extra_in):
+        """extra_in should be output from Split Transform"""
+        out = cv2.split(extra_in)
+        rows, cols = img_in.shape[:2]
+        n_rows = 2 * rows + 100
+        combined = np.zeros([n_rows, cols * len(out), img_in.shape[2]], dtype=np.uint8)
+
+        # Build original image as three channels
+        for idx, img in enumerate(out):
+            combined[:rows, idx * cols : ((idx + 1) * cols), idx] = img
+
+        # Add to the original combined image
+        row_s = rows + 100
+        row_e = 2 * rows + 100
+        col_s = cols
+        col_e = 2 * cols
+        combined[row_s:row_e, col_s:col_e, :] = img_in
+
+        # Draw an arrow
+        size = 60
+        extra = (100 - size) // 2
+        combined = cv2.arrowedLine(
+            img=combined,
+            pt1=((3 * cols) // 2, cols + extra),
+            pt2=((3 * cols) // 2, cols + extra + size),
+            color=(0, 255, 255),
+            thickness=10,
+            tipLength=0.5,
+        )
+
+        return combined

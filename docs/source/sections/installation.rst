@@ -70,5 +70,7 @@ Building Docs
 ^^^^^^^^^^^^^
 We use sphinx for documentation management::
 
+    # Top level docs directory
     cd docs
+    sphinx-apidoc -f -o source/ ../src/opencv_pg
     make html

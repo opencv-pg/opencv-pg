@@ -127,9 +127,10 @@ class BaseSlider(Param):
         widget.setMaximum(self.max)
         widget.setInterval(self.step)
         widget.setSingleStep(self.step)
-        widget.setValue(self.default)
+        widget.setValue(self._value)
         widget.value_changed.connect(self._handle_value_changed)
         container = SliderContainer(widget, editable_range=self.editable_range)
+        container.slider_text.setText(str(self._value))
         return container
 
     def set_step(self, step):
@@ -200,10 +201,11 @@ class ComboBox(Param):
         return self.options_map[default]
 
     def _get_widget(self, parent=None):
+        options_inverse = {v: k for k, v in self.options_map.items()}
         widget = QtWidgets.QComboBox(parent=parent)
         for item in self.options:
             widget.addItem(item)
-        widget.setCurrentText(self.default)
+        widget.setCurrentText(options_inverse[self._value])
         widget.currentTextChanged.connect(self._handle_value_changed)
         return widget
 
@@ -223,7 +225,7 @@ class ColorPicker(Param):
         """Represents a Select Box"""
         super().__init__(label, help_text=help_text)
         self.default = default
-        self._value = self._set_initial_value(default)
+        self._value = self._set_initial_value(self.default)
 
     def _set_initial_value(self, default):
         if default is None:
@@ -536,7 +538,6 @@ class SliderPairParam(Param):
         self.max = max_val
         self.default = default
         self.editable_range = editable_range
-        # TODO: Setup step function
         self.step = step
         self._value = self._set_initial_value(default, min_val, max_val)
 

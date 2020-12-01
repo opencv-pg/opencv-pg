@@ -6,13 +6,13 @@ It also comes with a custom `Pipeline Launcher` that allows you to build and int
 Full documentation can be found on [Read the Docs](https://opencv-pg.readthedocs.io/en/latest/).
 
 ## Demo
-<a href="https://drive.google.com/uc?export=view&id=1AKIvHywwR90qyDmypAX7abJX0s5eyVy7"><img src="https://media.giphy.com/media/08RQD736vk7mGzudyY/giphy.gif" style="width: 500px; height: auto;" /></a>
+<a href="https://drive.google.com/uc?export=view&id=1i4jmCHebu1_ognIwj2n4vtpCaT8BHWGI"><img src="https://media.giphy.com/media/GQj3aod8oKoxpJ4sC3/giphy.gif" style="width: 500px; height: auto;" /></a>
 
 
 ## Installation
 Currently tested with python 3.7.4 and opencv-headless-4.4.0.46
 
-From PyPi (not yet active):
+From PyPi:
 
 ```shell
 pip install opencv-pg
@@ -80,8 +80,7 @@ To install in development mode:
 
 ```shell
 git clone https://github.com/opencv-pg/opencv-pg
-cd opencv-pg
-pip install -e ./[dev]
+pip install -e opencv-pg/[dev]
 ```
 
 ### Running Tests

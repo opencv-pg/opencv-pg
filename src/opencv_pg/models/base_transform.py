@@ -93,7 +93,7 @@ class BaseTransform(metaclass=DeclarativeFieldBase):
     # Will use __name__.html if not set
     doc_filename = None
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self.params = []
         self.error = None
@@ -111,6 +111,53 @@ class BaseTransform(metaclass=DeclarativeFieldBase):
             if obj.label is None:
                 obj.label = name.replace("_", " ").title()
             self.params.append(obj)
+
+        self._setup_overridden_values(**kwargs)
+
+    def _setup_overridden_values(self, **kwargs):
+        """Sets overridden Param properties such as defaults"""
+        for attr, val in kwargs.items():
+            parts = attr.split('__')
+            if len(parts) > 1:
+                self._set_param_attr(parts[0], parts[1], val)
+            else:
+                self._set_overridden_default(parts[0], val)
+
+    def _get_param(self, param_name):
+        """Return param object or raise AttributeError
+
+        Args:
+            param_name (str): name of class Param
+
+        Raises:
+            AttributeError
+        """
+        _param = f'_{param_name}'
+        return getattr(self, _param)
+
+    def _set_overridden_default(self, param_name, val):
+        """Overrides the param default to provided value
+
+        Args:
+            param_name (str): Name of param
+            val (any): Value to set default to
+        """
+        # To raise Attribute Error if param_name doesn't exist
+        self._get_param(param_name)
+        setattr(self, param_name, val)
+
+    def _set_param_attr(self, param_name, attr, val):
+        """Sets attribute on param to val
+
+        Args:
+            param_name (str): name of class Param
+            attr (str): name of attr of Param
+            val (any): value to set attr of Param to
+        """
+        param = self._get_param(param_name)
+        # To raise AttribueError if it doesn't exist
+        getattr(param, attr)
+        setattr(param, attr, val)
 
     @classmethod
     def get_doc_filename(cls):

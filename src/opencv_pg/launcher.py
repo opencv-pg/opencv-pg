@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from qtpy import QtWidgets
@@ -5,6 +6,7 @@ from qtpy import QtWidgets
 import argparse
 from .main import MainWindow
 from .doc_viewer import DocWindow
+from .pipeline_launcher import LOG_FORMAT
 
 ROBOT = "robot.jpg"
 
@@ -22,7 +24,7 @@ def run_playground(args):
     if img_path is None:
         img_path = get_file_path(ROBOT)
     app = QtWidgets.QApplication([])
-    m = MainWindow(img_path, args.no_docs)
+    m = MainWindow(img_path, args.no_docs, args.disable_info_widgets)
     m.show()
     app.exec_()
 
@@ -55,7 +57,7 @@ def main():
     """Application entrypoint"""
     parser = argparse.ArgumentParser("OpenCV Playground")
     parser.add_argument(
-        "--image", type=str, help="Image to load in playground", default=None
+        "--image", type=str, help="Path to image to load into playground", default=None
     )
     parser.add_argument(
         "--no-docs",
@@ -63,7 +65,22 @@ def main():
         help="Do not load the doc window",
         default=False,
     )
+    parser.add_argument(
+        "--disable-info-widgets",
+        action="store_true",
+        help="Disable all info widgets",
+        default=False,
+    )
+    parser.add_argument(
+        "--log-level",
+        action="store",
+        default="INFO",
+        choices=["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"],
+        help="Log Level",
+    )
     args = parser.parse_args()
 
+    log_level = logging.getLevelName(args.log_level)
+    logging.basicConfig(format=LOG_FORMAT, level=log_level)
     _validate_image_path(args.image)
     run_playground(args)

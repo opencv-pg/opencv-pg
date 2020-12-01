@@ -138,33 +138,8 @@ class Split(BaseTransform):
     doc_filename = "split.html"
 
     def draw(self, img_in, extra_in):
-        rows, cols = img_in.shape[:2]
         out = cv2.split(img_in)
-        n_rows = 2 * rows + 100
-        combined = np.zeros([n_rows, cols * len(out), img_in.shape[2]], dtype=np.uint8)
-
-        # Add to the original combined image
-        row_e = rows
-        col_s = cols
-        col_e = 2 * cols
-        combined[:row_e, col_s:col_e, :] = img_in
-
-        for idx, img in enumerate(out):
-            combined[100 + rows :, idx * cols : ((idx + 1) * cols), idx] = img
-
-        # Draw an arrow
-        size = 60
-        extra = (100 - size) // 2
-        combined = cv2.arrowedLine(
-            img=combined,
-            pt1=((3 * cols) // 2, cols + extra),
-            pt2=((3 * cols) // 2, cols + extra + size),
-            color=(0, 255, 255),
-            thickness=10,
-            tipLength=0.5,
-        )
-
-        return combined
+        return img_in, out
 
     def get_info_widget(self):
         """Adds labels centered under the images describing the channel"""
@@ -185,51 +160,8 @@ class Merge(BaseTransform):
 
     def draw(self, img_in, extra_in):
         """Since need to merge multiple channels to 1, first split, then merge"""
-        rows, cols = img_in.shape[:2]
-        out = cv2.split(img_in)
-        n_rows = 2 * rows + 100
-        combined = np.zeros([n_rows, cols * len(out), img_in.shape[2]], dtype=np.uint8)
-
-        # Build original image as three channels
-        for idx, img in enumerate(out):
-            combined[:rows, idx * cols : ((idx + 1) * cols), idx] = img
-
-        # Create merged image
-        merged = cv2.merge(out)
-
-        # Add to the original combined image
-        row_s = rows + 100
-        row_e = 2 * rows + 100
-        col_s = cols
-        col_e = 2 * cols
-        combined[row_s:row_e, col_s:col_e, :] = merged
-
-        # Draw an arrow
-        size = 60
-        extra = (100 - size) // 2
-        combined = cv2.arrowedLine(
-            img=combined,
-            pt1=((3 * cols) // 2, cols + extra),
-            pt2=((3 * cols) // 2, cols + extra + size),
-            color=(0, 255, 255),
-            thickness=10,
-            tipLength=0.5,
-        )
-
-        return combined
-
-    def get_info_widget(self):
-        """Adds labels centered under the images describing the channel"""
-        wid = QtWidgets.QWidget()
-        layout = QtWidgets.QHBoxLayout()
-        left = QtWidgets.QLabel("Blue Channel", alignment=QtCore.Qt.AlignLeft)
-        mid = QtWidgets.QLabel("Green Channel", alignment=QtCore.Qt.AlignCenter)
-        right = QtWidgets.QLabel("Red Channel", alignment=QtCore.Qt.AlignRight)
-        layout.addWidget(left)
-        layout.addWidget(mid)
-        layout.addWidget(right)
-        wid.setLayout(layout)
-        return wid
+        merged = cv2.merge(extra_in)
+        return img_in, merged
 
 
 class Filter2D(BaseTransform):
@@ -345,7 +277,7 @@ class HoughCircles(BaseTransform):
     dp = params.FloatSlider(min_val=1, max_val=5, default=1, step=0.01)
     min_dist = params.IntSlider(min_val=1, max_val=500, default=50)
     param1 = params.IntSlider(min_val=1, max_val=200, default=1, step=1)
-    param2 = params.FloatSlider(min_val=1, max_val=200, default=10, step=1)
+    param2 = params.IntSlider(min_val=1, max_val=200, default=10, step=1)
     min_radius = params.IntSlider(min_val=1, max_val=250, default=50)
     max_radius = params.IntSlider(min_val=-1, max_val=250, default=100)
 
@@ -458,7 +390,7 @@ class Sobel(BaseTransform):
     dy = params.IntSlider(min_val=1, max_val=2, default=1, step=1)
     k_size = params.IntSlider(min_val=1, max_val=7, default=3, step=2)
     scale = params.FloatSlider(min_val=0.10, max_val=200, default=100.0, step=0.1)
-    delta = params.IntSlider(min_val=-255, max_val=255, default=0, label="Delta")
+    delta = params.IntSlider(min_val=-255, max_val=255, default=0)
     border_type = params.ComboBox(
         options=[
             "BORDER_CONSTANT",
@@ -643,8 +575,8 @@ class FastNIMeansDenoisingColored(BaseTransform):
 
     template_window_size = params.IntSlider(min_val=1, max_val=15, default=7, step=2)
     search_window_size = params.IntSlider(min_val=1, max_val=51, default=21, step=2)
-    h = params.FloatSlider(min_val=0, max_val=25, default=3)
-    h_color = params.FloatSlider(min_val=0, max_val=25, default=7)
+    h = params.IntSlider(min_val=0, max_val=25, default=3, step=1)
+    h_color = params.IntSlider(min_val=0, max_val=25, default=7, step=1)
 
     def draw(self, img_in, extra_in):
         out = cv2.fastNlMeansDenoisingColored(
@@ -848,7 +780,7 @@ class GoodFeaturesToTrack(BaseTransform):
     doc_filename = "goodFeaturesToTrack.html"
 
     max_corners = params.IntSlider(min_val=0, max_val=100, default=0)
-    quality_level = params.FloatSlider(min_val=0, max_val=1.0, default=0.1, step=0.001)
+    quality_level = params.FloatSlider(min_val=0.001, max_val=1.0, default=0.1, step=0.001)
     min_distance = params.FloatSlider(min_val=0, max_val=100, default=5, step=0.001)
     block_size = params.IntSlider(min_val=1, max_val=7, default=3, step=2)
     use_harris_detector = params.CheckBox()
@@ -925,7 +857,6 @@ class ApproxPolyDP(BaseTransform):
         approx_contours = []
 
         for cont in contours:
-            perimeter = cv2.arcLength(cont, True)
             epsilon = self.epsilon
             approx = cv2.approxPolyDP(cont, epsilon, self.closed)
             approx_contours.append(approx)
@@ -994,11 +925,7 @@ class GetGaussianKernel(BaseTransform):
 
     def draw(self, img_in, extra_in):
         out = cv2.getGaussianKernel(ksize=self.k_size, sigma=self.sigma)
-        img = np.tile(out, (1, self.k_size)) * 255
-        num_rows = img_in.shape[0]
-        scale = num_rows / self.k_size
-        img = cv2.resize(img, dsize=(0, 0), fx=scale, fy=scale)
-        return img
+        return img_in, out
 
 
 class MatchTemplate(BaseTransform):
@@ -1076,7 +1003,7 @@ class AddWeighted(BaseTransform):
 
     alpha = params.FloatSlider(min_val=0.0, max_val=1.0, default=1.0, step=0.005)
     beta = params.FloatSlider(min_val=0.0, max_val=1.0, default=0.0, step=0.005)
-    gamma = params.FloatSlider(min_val=0, max_val=255, default=0.0, step=1.0)
+    gamma = params.IntSlider(min_val=0, max_val=255, default=0.0, step=1.0)
 
     def draw(self, img_in, extra_in):
         rev_rows = np.arange(img_in.shape[0]) * (-1)
@@ -1160,7 +1087,6 @@ class PyrDown(BaseTransform):
             "BORDER_REFLECT",
             "BORDER_WRAP",
             "BORDER_DEFAULT",
-            "BORDER_ISOLATED",
         ],
         default="BORDER_DEFAULT",
         options_map=cvc.BORDERS,
@@ -1187,32 +1113,7 @@ class PyrDown(BaseTransform):
             )
             pyramid.append(np.copy(img))
 
-        out = self._build_composite(pyramid)
-        return out
-
-    def _build_composite(self, images):
-        """Create a composite images from the downsampled images
-
-        Args:
-            images ([np.ndarray]): list of downsamples images, large to small
-
-        Returns:
-            np.ndarray: Composite image
-        """
-        depth = 0 if len(images[0].shape) == 2 else images[0].shape[2]
-
-        col_pix = [0] + [x.shape[1] for x in images]
-        col_tot = np.sum(col_pix)
-        row_tot = images[0].shape[0]
-        shape = (row_tot, col_tot, depth) if depth else (row_tot, col_tot)
-        out = np.zeros(shape, dtype=np.uint8)
-        col_starts = np.cumsum(col_pix)
-
-        for idx in range(len(images)):
-            col_s = col_starts[idx]
-            cr, cc = images[idx].shape[:2]
-            out[0:cr, col_s : col_s + cc] = images[idx]
-        return out
+        return img_in, pyramid
 
 
 class FillPoly(BaseTransform):

@@ -16,10 +16,12 @@ log = logging.getLogger(__name__)
 
 
 class Playground(QtWidgets.QSplitter):
-    def __init__(self, img_path, no_docs, parent=None, *args, **kwargs):
+    def __init__(self, img_path, no_docs, disable_info_widgets,
+                 parent=None, *args, **kwargs):
         super().__init__(parent=parent, *args, **kwargs)
         self.img_path = str(img_path)
         self.show_docs = not no_docs
+        self.show_info_widgets = not disable_info_widgets
         self.docview = None
         self.pipe_stack = None
         self.added_pipes = {}
@@ -63,7 +65,8 @@ class Playground(QtWidgets.QSplitter):
         if self.pipe_stack.currentIndex() == -1 or tname not in self.added_pipes:
             window = get_transform_window(transform, self.img_path)
             pipe = Pipeline(window)
-            pipe_win = PipeWindow(window, parent=self)
+            pipe_win = PipeWindow(
+                window, parent=self, show_info_widget=self.show_info_widgets)
             img, _ = pipe.run_pipeline()
             pipe_win.update_image(img, pipe_win.viewer)
             self.pipe_stack.addWidget(pipe_win)

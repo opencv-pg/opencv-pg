@@ -1,3 +1,4 @@
 # Changes
-## 0.0.1
-- Changes ...
+
+## 1.0.0
+- Initial Release

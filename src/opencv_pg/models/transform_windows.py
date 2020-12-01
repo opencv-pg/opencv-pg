@@ -3,6 +3,7 @@ import logging
 from .pipeline import Window
 from . import support_transforms as supt
 from . import transforms as tf
+from .base_transform import BaseTransform
 
 from opencv_pg.docs.doc_writer import render_local_doc, RENDERED_DIR
 
@@ -18,8 +19,8 @@ _TRANS_WINDOWS = {
     tf.MedianBlur: [_LOADER_CLASS, tf.MedianBlur],
     tf.CopyMakeBorder: [_LOADER_CLASS, tf.CopyMakeBorder],
     tf.Normalize: [_LOADER_CLASS, tf.Normalize],
-    tf.Split: [_LOADER_CLASS, tf.Split],
-    tf.Merge: [_LOADER_CLASS, tf.Merge],
+    tf.Split: [_LOADER_CLASS, tf.Split, supt.DrawSplit],
+    tf.Merge: [_LOADER_CLASS, tf.Split, tf.Merge, supt.DrawMerge],
     tf.Filter2D: [_LOADER_CLASS, tf.Filter2D],
     tf.Canny: [_LOADER_CLASS, tf.Canny],
     tf.HoughLines: [
@@ -56,12 +57,12 @@ _TRANS_WINDOWS = {
         tf.CornerHarris,
         supt.DisplayHarris,
     ],
-    tf.PyrDown: [_LOADER_CLASS, tf.PyrDown],
+    tf.PyrDown: [_LOADER_CLASS, tf.PyrDown, supt.DrawPyrDown],
     tf.FillPoly: [supt.BlankCanvas, tf.FillPoly],
     tf.BoxFilter: [_LOADER_CLASS, tf.BoxFilter],
     tf.Sobel: [_LOADER_CLASS, tf.Sobel],
     tf.Resize: [_LOADER_CLASS, tf.Resize],
-    tf.GetGaussianKernel: [_LOADER_CLASS, tf.GetGaussianKernel],
+    tf.GetGaussianKernel: [_LOADER_CLASS, tf.GetGaussianKernel, supt.DrawGaussianKernel],
     tf.AddWeighted: [_LOADER_CLASS, tf.AddWeighted],
     tf.CornerEigenValsAndVecs: [
         _LOADER_CLASS,
@@ -85,7 +86,7 @@ _TRANS_WINDOWS = {
         tf.FindContours,
         supt.DrawContours,
         tf.ApproxPolyDP,
-        supt.DrawContours,
+        supt.DrawContours(color=(0, 0, 255)),
     ],
     tf.FindContours: [_LOADER_CLASS, tf.FindContours, supt.DrawContours],
     tf.MatchTemplate: [_LOADER_CLASS, tf.MatchTemplate],
@@ -134,7 +135,7 @@ def get_transform_window(transform, img_path):
         loader = _LOADER_CLASS(img_path)
 
     if loader is None:
-        trans_inst = [x() for x in transforms]
+        trans_inst = [x if isinstance(x, BaseTransform) else x() for x in transforms]
     else:
-        trans_inst = [loader] + [x() for x in transforms[1:]]
+        trans_inst = [loader] + [x if isinstance(x, BaseTransform) else x() for x in transforms[1:]]
     return Window(trans_inst)
