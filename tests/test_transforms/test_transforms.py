@@ -1055,6 +1055,9 @@ class TestGetGaussianKernel():
         """Test Other params"""
         # Given
         window = get_transform_window(transforms.GetGaussianKernel, IMG_PATH)
+        # Drop the display transform - window isn't set on pipeline
+        # pipeline usually does that setup and we're not using it
+        window.transforms.pop()
         tf = window.transforms[1]
         tf.k_size = k_size
         tf.sigma = sigma
