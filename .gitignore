@@ -11,3 +11,4 @@ venv
 **/rendered_docs/*.html
 docs/build/
 build/
+dist/
