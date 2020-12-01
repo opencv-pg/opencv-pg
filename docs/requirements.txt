@@ -1,4 +1,0 @@
-qtpy==1.9.0
-pyside2==5.15.0
-jinja2==2.11.2
-opencv-contrib-python-headless==4.4.0.46
