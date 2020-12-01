@@ -27,7 +27,9 @@ See the :mod:`Params<opencv_pg.models.params>` module for existing ``Param`` cla
 
 Defining a New Param
 ^^^^^^^^^^^^^^^^^^^^
-A new :class:`Param<opencv_pg.models.params.Param>` can be defined as follows::
+A new :class:`Param<opencv_pg.models.params.Param>` can be defined as follows:
+
+.. code-block:: python
 
     class MyParam(Param):
         def __init__(self, my_arg, default=None, label=None, read_only=False, help_text=''):
@@ -66,7 +68,9 @@ Creating a New Transform
 ^^^^^^^^^^^^^^^^^^^^^^^^
 Creating your own ``Transform`` is easy!
 
-A new :class:`Transform<opencv_pg.models.base_transform.BaseTransform>` can be defined as follows::
+A new :class:`Transform<opencv_pg.models.base_transform.BaseTransform>` can be defined as follows:
+
+.. code-block:: python
 
     from opencv_pg import BaseTransform
     from opencv_pg import params
@@ -115,7 +119,9 @@ A :class:`Window<opencv_pg.models.window.Window>` is composed of one or more :cl
 
 Creating a Window
 ^^^^^^^^^^^^^^^^^
-A window can be created as follows::
+A window can be created as follows:
+
+.. code-block:: python
 
     window = Window([
         Transform1(),
@@ -130,7 +136,9 @@ The :class:`Pipeline<opencv_pg.models.pipeline.Pipeline>` represents the top lev
 
 Creating a Pipeline
 ^^^^^^^^^^^^^^^^^^^
-A Pipeline can be created in any of the following ways::
+A Pipeline can be created in any of the following ways:
+
+.. code-block:: python
 
     # There is a single Transform
     pipeline1 = Pipeline(Transform())
@@ -156,7 +164,9 @@ Now that you've created your own custom ``Params`` and ``Transforms``, we can pu
 
 A custom ``Pipeline`` can be launched by your own code using the :func:`launch_pipeline<opencv_pg.pipeline_launcher.launch_pipeline>` function. When this is done, a Qt Window will be displayed for each ``Window`` in your ``Pipeline``.
 
-Example::
+Example:
+
+.. code-block:: python
 
     from opencv_pg import Pipeline, Window, launch_pipeline
     from opencv_pg import support_transforms as supt
