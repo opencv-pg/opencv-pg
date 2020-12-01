@@ -17,7 +17,6 @@ The ``OpenCV Playground`` is an interactive Qt5 application that is meant to fac
    sections/usage
    sections/pipeline_backend
    sections/adding_new
-   sections/development
 
 
 Indices and tables
