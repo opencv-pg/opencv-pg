@@ -25,8 +25,6 @@ A :class:`Param<opencv_pg.models.params.Param>` is an input to the :class:`Trans
 
 See the :mod:`Params<opencv_pg.models.params>` module for existing ``Param`` classes that can be used.
 
-**TODO:** Update DocStrings in Params module
-
 Defining a New Param
 ^^^^^^^^^^^^^^^^^^^^
 A new :class:`Param<opencv_pg.models.params.Param>` can be defined as follows::
@@ -60,14 +58,14 @@ A :class:`Transform<opencv_pg.models.base_transform.BaseTransform>` defines eith
 
 The :class:`Transform<opencv_pg.models.base_transform.BaseTransform>` defines a :func:`draw(img_in, extra_in)<opencv_pg.models.base_transform.BaseTransform.draw>` method that takes an image in and possibly extra information, and then returns an image or an image and some extra information as a ``tuple``. These are passed onto the next :class:`Transform<opencv_pg.models.base_transform.BaseTransform>`.
 
-Each :class:`Param<opencv_pg.models.params.Param>` value can be accessed via the ``self.param_name`` convenience accessor. The actual :class:`Param<opencv_pg.models.params.Param>` instance is stored as ``self._param_name``.
+Each :class:`Param<opencv_pg.models.params.Param>` value can be accessed and set via ``self.param_name``. The actual :class:`Param<opencv_pg.models.params.Param>` instance is stored as ``self._param_name``.
 
-Please see the :mod:`opencv_pg.models.transforms` and  :mod:`opencv_pg.models.support_transforms` modules for existing :class:`Transforms<opencv_pg.models.base_transform.BaseTransform>`.
-
-**TODO:** Update DocStrings on all ``Transforms``
+Please see the :mod:`opencv_pg.models.transforms` and  :mod:`opencv_pg.models.support_transforms` modules for existing :class:`Transforms<opencv_pg.models.base_transform.BaseTransform>` which may be useful.
 
 Creating a New Transform
 ^^^^^^^^^^^^^^^^^^^^^^^^
+Creating your own ``Transform`` is easy!
+
 A new :class:`Transform<opencv_pg.models.base_transform.BaseTransform>` can be defined as follows::
 
     from opencv_pg import BaseTransform
@@ -124,7 +122,7 @@ A window can be created as follows::
         Transform2()
     ])
 
-You can optionally pass a ``name`` argument to the ``Window`` to give it a meaningful name. If no ``name`` is passed, it will be named ``Step N``, according to its position in the ``Pipeline``.
+You can optionally pass a ``name`` argument to the ``Window`` to give it a meaningful window title. If no ``name`` is passed, it will be named ``Step N``, according to its position in the ``Pipeline``.
 
 Pipeline
 --------
@@ -166,6 +164,7 @@ Example::
         my_image = '/path/to/image.png'
 
         pipeline = Pipeline([
+            # You could also import and use your own Transforms
             Window([
                 supt.LoadImage(my_image),
                 supt.CvtColor(),
