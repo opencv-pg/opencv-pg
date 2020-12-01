@@ -152,6 +152,8 @@ A Pipeline can be created in any of the following ways::
 
 Pipeline Launcher
 -----------------
+Now that you've created your own custom ``Params`` and ``Transforms``, we can put them all together into your own pipeline.
+
 A custom ``Pipeline`` can be launched by your own code using the :func:`launch_pipeline<opencv_pg.pipeline_launcher.launch_pipeline>` function. When this is done, a Qt Window will be displayed for each ``Window`` in your ``Pipeline``.
 
 Example::
@@ -179,4 +181,3 @@ Example::
         launch_pipeline(pipeline)
 
 This will show two ``Windows``. The first with the final output of the ``BitwiseAnd`` and the second with the output of the ``Canny`` operation.
-
