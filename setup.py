@@ -25,7 +25,7 @@ def read(*names, **kwargs):
 
 setup(
     name='opencv-pg',
-    version='1.0.0',
+    version='1.0.1',
     license='GPL-3.0-or-later',
     description='Qt5 GUI Application for realtime exploration of OpenCV functions',
     long_description="%s\n%s" % (
