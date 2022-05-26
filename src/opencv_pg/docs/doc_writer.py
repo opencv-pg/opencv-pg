@@ -32,7 +32,7 @@ def render_local_doc(folder, doc_fname):
         html = template.render(error=f"Template: {doc_fname} not found :(")
 
     path = folder.joinpath(doc_fname)
-    with open(path, "w") as fout:
+    with open(path, "w", encoding="utf-8") as fout:
         fout.write(html)
         log.debug("Wrote Doc: %s", path)
 
