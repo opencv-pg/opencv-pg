@@ -1,6 +1,7 @@
 import logging
 
-from qtpy import QtWidgets, QtCore, QtGui
+from qtpy import QtCore, QtGui, QtWidgets
+from qtpy.QtWidgets import QStyle
 
 log = logging.getLogger(__name__)
 
@@ -35,7 +36,9 @@ class DoubleSlider(QtWidgets.QSlider):
         """
         self.initStyleOption(self.opt)
         handle = self.style.subControlRect(
-            self.style.CC_Slider, self.opt, self.style.SC_SliderHandle
+            QStyle.ComplexControl.CC_Slider,
+            self.opt,
+            QStyle.SubControl.SC_SliderHandle,
         )
 
         pos_local = handle.topLeft() + QtCore.QPoint(x_offset, y_offset)
@@ -219,11 +222,11 @@ class SliderContainer(QtWidgets.QWidget):
             str(self.slider.value()),
             width=45,
             validator=slider_validator,
-            alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft)
+            alignment=QtCore.Qt.AlignTop | QtCore.Qt.AlignLeft,
+        )
         main_layout.addWidget(self.slider_text)
         if not show_editable_value:
             self.slider_text.setVisible(False)
-
 
         # Min/Max Labels
         self.min_label, self.max_label = self._get_minmax_labels(
@@ -332,8 +335,10 @@ class SliderPair(SliderContainer):
 
     def __init__(self, top_slider, bot_slider, editable_range, parent=None):
         super().__init__(
-            slider=top_slider, editable_range=editable_range, parent=parent,
-            show_editable_value=False
+            slider=top_slider,
+            editable_range=editable_range,
+            parent=parent,
+            show_editable_value=False,
         )
         self.layout().children()[0].insertWidget(1, bot_slider)
         top_slider.value_changed.connect(self._emit_top_changed)
