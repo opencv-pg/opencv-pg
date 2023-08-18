@@ -3,9 +3,10 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+from cv2.typing import Point
 
-from . import params
 from . import cv2_constants as cvc
+from . import params
 from .base_transform import BaseTransform
 
 log = logging.getLogger(__name__)
@@ -106,7 +107,10 @@ class DrawLinesByPointAndAngle(BaseTransform):
             if self.show_points:
                 img = cv2.circle(
                     img=img,
-                    center=(round(rho * np.cos(theta)), round(rho * np.sin(theta))),
+                    center=(
+                        int(round(rho * np.cos(theta))),
+                        int(round(rho * np.sin(theta))),
+                    ),
                     radius=3,
                     color=(255 - b, 255 - g, 255 - r),
                     thickness=3,
@@ -200,7 +204,7 @@ class DrawCircles(BaseTransform):
         for x, y, radius in extra_in:
             img = cv2.circle(
                 img=img,
-                center=(x, y),
+                center=(int(x), int(y)),
                 radius=int(radius),
                 color=self.color,
                 thickness=self.thickness,
@@ -245,7 +249,7 @@ class DrawCirclesFromPoints(BaseTransform):
 
         if isinstance(extra_in, np.ndarray):
             if len(extra_in.shape) == 3:
-                points = extra_in.reshape(extra_in.shape[0], 2)
+                points = extra_in.reshape(extra_in.shape[0], 2).astype(int)
 
         for x, y in points:
             img = cv2.circle(
@@ -299,10 +303,10 @@ class DrawCornerSubPix(BaseTransform):
             img = cv2.cvtColor(img_in, cv2.COLOR_GRAY2BGR)
 
         orig_points = extra_in[0]
-        orig_points = orig_points.reshape(orig_points.shape[0], 2)
+        orig_points = orig_points.reshape(orig_points.shape[0], 2).astype(int)
 
         new_points = extra_in[1]
-        new_points = new_points.reshape(new_points.shape[0], 2)
+        new_points = new_points.reshape(new_points.shape[0], 2).astype(int)
 
         for x, y in orig_points:
             img = cv2.circle(
@@ -368,7 +372,7 @@ class ClusterGenerator(BaseTransform):
         x = x.clip(0, x_max)
         y = y.reshape((np.product(y.shape), 1))
         y = y.clip(0, y_max)
-        points = np.hstack([x, y]).astype(np.int)
+        points = np.hstack([x, y]).astype(int)
         return points
 
 
@@ -378,7 +382,11 @@ class DrawKMeansPoints(BaseTransform):
     point_size = params.IntSlider(min_val=1, max_val=25, default=2)
     center_point_size = params.IntSlider(min_val=1, max_val=25, default=4)
     center_color = params.ColorPicker(default=(0, 255, 0))
-    h = params.IntSlider(min_val=0, max_val=179, default=100,)
+    h = params.IntSlider(
+        min_val=0,
+        max_val=179,
+        default=100,
+    )
     s = params.IntSlider(min_val=1, max_val=255, default=255)
     v = params.IntSlider(min_val=1, max_val=255, default=255)
 
@@ -390,7 +398,8 @@ class DrawKMeansPoints(BaseTransform):
     def draw(self, img_in, extra_in):
         img = np.copy(img_in)
         points, labels, centers = extra_in
-        centers = centers.astype(np.int)
+        points = points.astype(int)
+        centers = centers.astype(int)
         self.n_clusters = len(centers)
 
         # Reset colors - no this is not efficient
