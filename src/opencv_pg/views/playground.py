@@ -1,23 +1,23 @@
 import logging
 
 from qtpy import QtWidgets
-from qtpy.QtCore import Qt, Slot, QModelIndex, QUrl
+from qtpy.QtCore import QModelIndex, Qt, QUrl, Slot
 from qtpy.QtWebEngineWidgets import QWebEngineView
 
-from .widgets.transform_list import TransformList
-from .pipeline_window import PipeWindow
-
+from opencv_pg.docs.doc_writer import RENDERED_DIR
 from opencv_pg.models.pipeline import Pipeline
 from opencv_pg.models.transform_windows import get_transform_window
-from opencv_pg.docs.doc_writer import RENDERED_DIR
 
+from .pipeline_window import PipeWindow
+from .widgets.transform_list import TransformList
 
 log = logging.getLogger(__name__)
 
 
 class Playground(QtWidgets.QSplitter):
-    def __init__(self, img_path, no_docs, disable_info_widgets,
-                 parent=None, *args, **kwargs):
+    def __init__(
+        self, img_path, no_docs, disable_info_widgets, parent=None, *args, **kwargs
+    ):
         super().__init__(parent=parent, *args, **kwargs)
         self.img_path = str(img_path)
         self.show_docs = not no_docs
@@ -40,15 +40,21 @@ class Playground(QtWidgets.QSplitter):
         self.addWidget(tlist)
 
         # Connect change handlers for the transform list
-        tlist.builtin_list.selectionModel().currentChanged.connect(self._handle_changed)
+        if self.show_docs:
+            tlist.builtin_list.selectionModel().currentChanged.connect(
+                self._handle_changed
+            )
         tlist.builtin_list.selectionModel().currentChanged.connect(
             self._reload_pipeline
         )
 
         # Document Viewer
         if self.show_docs:
-            self.docview = QWebEngineView(self)
+            self.docview = QWebEngineView(parent=self)
             self.addWidget(self.docview)
+            # NOTE: No idea why, but we get random segfaults if we don't first set/load
+            # some kind of html before the signal handler takes over ... :shrug:
+            self.docview.setHtml("")
 
         # PipeWindow
         self.pipe_stack = QtWidgets.QStackedWidget(parent=self)
@@ -66,7 +72,8 @@ class Playground(QtWidgets.QSplitter):
             window = get_transform_window(transform, self.img_path)
             pipe = Pipeline(window)
             pipe_win = PipeWindow(
-                window, parent=self, show_info_widget=self.show_info_widgets)
+                window, parent=self, show_info_widget=self.show_info_widgets
+            )
             img, _ = pipe.run_pipeline()
             pipe_win.update_image(img, pipe_win.viewer)
             self.pipe_stack.addWidget(pipe_win)
@@ -78,11 +85,8 @@ class Playground(QtWidgets.QSplitter):
     @Slot(QModelIndex, QModelIndex)
     def _handle_changed(self, current, previous):
         """Reloads documentation for selected Transform"""
-        if not self.show_docs:
-            return
         model = current.model()
         transform = model.items[current.row()]
         doc_fname = RENDERED_DIR.joinpath(transform.get_doc_filename())
         url = QUrl.fromLocalFile(str(doc_fname))
         self.docview.load(url)
-        self.docview.show()
