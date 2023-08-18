@@ -1,6 +1,6 @@
 import logging
 
-from qtpy import QtWidgets
+from qtpy import QtCore, QtWidgets
 from qtpy.QtCore import QModelIndex, Qt, QUrl, Slot
 from qtpy.QtWebEngineWidgets import QWebEngineView
 
@@ -51,6 +51,9 @@ class Playground(QtWidgets.QSplitter):
         # Document Viewer
         if self.show_docs:
             self.docview = QWebEngineView(parent=self)
+            self.docview.setAttribute(
+                QtCore.Qt.WidgetAttribute.WA_AcceptTouchEvents, False
+            )
             self.addWidget(self.docview)
             # NOTE: No idea why, but we get random segfaults if we don't first set/load
             # some kind of html before the signal handler takes over ... :shrug:
