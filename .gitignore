@@ -163,3 +163,4 @@ settings.json
 .DS_Store
 **/rendered_docs/*.html
 docs/build/
+.python-version
