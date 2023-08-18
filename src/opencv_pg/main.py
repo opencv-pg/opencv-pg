@@ -1,3 +1,4 @@
+from qtpy import QtCore
 from qtpy.QtGui import QGuiApplication, QKeySequence
 from qtpy.QtWidgets import QAction, QMainWindow
 
@@ -9,6 +10,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         # TODO: Still get the t.pointer.dispatch: skipping QEventPoint warning
         # when clicking on another window
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_AcceptTouchEvents, False)
         self.setWindowTitle("OpenCV PlayGround")
         self._setup_window_size(0.5)
         self._add_statusbar()
