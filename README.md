@@ -25,7 +25,7 @@ pip install git+https://github.com/opencv-pg/opencv-pg
 ```
 
 ### Note for Linux Users
-**NOTE:** I no longer have access to anything but a Mac (as of `1.0.3`), so I can't confirm if the below still stands. It did in `1.0.2`.
+**NOTE:** I no longer have access to anything but a Mac (as of `1.0.2`), so I can't confirm if the below still stands. It did in `1.0.1`.
 
 On Ubuntu 16.04 (others currently untested), there may be missing links to xcb related shared objects.
 
