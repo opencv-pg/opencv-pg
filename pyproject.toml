@@ -1,0 +1,32 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.2,<4"]
+
+[project]
+name = "opencv-pg"
+description = "Qt6 GUI Application for realtime exploration of OpenCV functions"
+version = "1.0.3"
+readme = "README.md"
+authors = []
+requires-python = ">=3.7"
+license = { file = "LICENSE.txt" }
+dependencies = [
+    "pyside6==6.5.2",
+    "qtpy==2.3.1",
+    "opencv-contrib-python-headless==4.8.0.76",
+    "jinja2==3.1.2",
+]
+keywords = ["opencv", "cv2", "cv", "computer vision"]
+
+[project.optional-dependencies]
+dev = ["pytest==6.0.1", "flake8", "sphinx==3.2.1"]
+
+[project.urls]
+Homepage = "https://github.com/opencv-pg/opencv-pg"
+Documentation = "https://opencv-pg.readthedocs.io/en/latest/"
+Repository = "https://github.com/opencv-pg/opencv-pg"
+Changelog = "https://github.com/opencv-pg/opencv-pg/blob/master/CHANGELOG.md"
+
+[project.scripts]
+opencvpg = "opencv_pg.launcher:main"
+opencvpg_docview = "opencv_pg.launcher:docview"
