@@ -5,7 +5,7 @@ requires = ["flit_core >=3.2,<4"]
 [project]
 name = "opencv-pg"
 description = "Qt6 GUI Application for realtime exploration of OpenCV functions"
-version = "1.0.3"
+version = "1.0.2"
 readme = "README.md"
 authors = []
 requires-python = ">=3.7"
