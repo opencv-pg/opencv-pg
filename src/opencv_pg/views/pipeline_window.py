@@ -5,7 +5,8 @@ This format is not going to be used. View model probably works better
 import logging
 
 import numpy as np
-from qtpy import QtWidgets, QtCore, QtGui
+from qtpy import QtCore, QtGui, QtWidgets
+
 from opencv_pg.models.window import Window
 
 from .widgets.image_viewer import ImageViewer

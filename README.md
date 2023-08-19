@@ -1,7 +1,7 @@
 # OpenCV Playground
-The OpenCV Playground is a Qt5 application that brings together improved documentation alongside OpenCV functions with the ability to explore the effects of function parameters on an image in real time.
+The OpenCV Playground is a Qt6 application that brings together improved documentation alongside OpenCV functions with the ability to explore the effects of function parameters on an image in real time.
 
-It also comes with a custom `Pipeline Launcher` that allows you to build and interact with your own sequence of image transformations.
+It also comes with a custom `Pipeline Launcher` that allows you to build and interact with your own sequence of image transformations along with custom build functions.
 
 Full documentation can be found on [Read the Docs](https://opencv-pg.readthedocs.io/en/latest/).
 
@@ -10,7 +10,7 @@ Full documentation can be found on [Read the Docs](https://opencv-pg.readthedocs
 
 
 ## Installation
-Currently tested with python 3.7.4 and opencv-headless-4.4.0.46
+Currently tested with python 3.8.10/3.10.0 and opencv-contrib-python-headless 4.8.0.76 on an M1 Mac.
 
 From PyPi:
 
@@ -25,6 +25,8 @@ pip install git+https://github.com/opencv-pg/opencv-pg
 ```
 
 ### Note for Linux Users
+**NOTE:** I no longer have access to anything but a Mac (as of `1.0.3`), so I can't confirm if the below still stands. It did in `1.0.2`.
+
 On Ubuntu 16.04 (others currently untested), there may be missing links to xcb related shared objects.
 
 tldr;
@@ -32,7 +34,6 @@ tldr;
 ```shell
 sudo apt-get install --reinstall libxcb-xinerama0
 ```
-
 ------
 
 **Digging Deeper**

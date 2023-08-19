@@ -1,11 +1,11 @@
+import argparse
 import logging
 from pathlib import Path
 
-from qtpy import QtWidgets
+from qtpy import QtCore, QtWidgets
 
-import argparse
-from .main import MainWindow
 from .doc_viewer import DocWindow
+from .main import MainWindow
 from .pipeline_launcher import LOG_FORMAT
 
 ROBOT = "robot.jpg"
@@ -25,6 +25,7 @@ def run_playground(args):
         img_path = get_file_path(ROBOT)
     app = QtWidgets.QApplication([])
     m = MainWindow(img_path, args.no_docs, args.disable_info_widgets)
+    m.setAttribute(QtCore.Qt.WidgetAttribute.WA_AcceptTouchEvents, False)
     m.show()
     app.exec_()
 
@@ -35,7 +36,7 @@ def docview():
     parser.add_argument(
         "--template",
         type=str,
-        required=False,
+        required=True,
         help="Template name in opencv_pg/docs/source_docs folder, eg, GaussianBlur.html",
     )
 

@@ -1,11 +1,16 @@
-from qtpy.QtGui import QKeySequence, QGuiApplication
-from qtpy.QtWidgets import QMainWindow, QAction
+from qtpy import QtCore
+from qtpy.QtGui import QGuiApplication, QKeySequence
+from qtpy.QtWidgets import QAction, QMainWindow
+
 from .views import playground
 
 
 class MainWindow(QMainWindow):
     def __init__(self, img_path, no_docs, disable_info_widgets):
         super().__init__()
+        # TODO: Still get the t.pointer.dispatch: skipping QEventPoint warning
+        # when clicking on another window
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_AcceptTouchEvents, False)
         self.setWindowTitle("OpenCV PlayGround")
         self._setup_window_size(0.5)
         self._add_statusbar()
@@ -13,7 +18,8 @@ class MainWindow(QMainWindow):
 
         # TODO: set this with either playground or designer
         self.setCentralWidget(
-            playground.Playground(img_path, no_docs, disable_info_widgets))
+            playground.Playground(img_path, no_docs, disable_info_widgets)
+        )
 
     def _setup_window_size(self, fraction):
         """Setup default window dimensions"""
